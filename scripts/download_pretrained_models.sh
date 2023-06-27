@@ -17,17 +17,17 @@ git lfs install  # if git-lfs is not installed
 git lfs pull 
 cd ..
 
-GIT_LFS_SKIP_SMUDGE=1 git clone https://huggingface.co/andite/anything-v4.0
+GIT_LFS_SKIP_SMUDGE=1 git clone https://huggingface.co/xyn-ai/anything-v4.0
 rm -rf ./anything-v4.0/**/*.bin
 rm -rf ./anything-v4.0/**/*.safetensors
-wget -P ./anything-v4.0/safety_checker/ https://huggingface.co/andite/anything-v4.0/resolve/main/safety_checker/model.safetensors
-wget -P ./anything-v4.0/safety_checker/ https://huggingface.co/andite/anything-v4.0/resolve/main/safety_checker/pytorch_model.bin 
-wget -P ./anything-v4.0/text_encoder/ https://huggingface.co/andite/anything-v4.0/resolve/main/text_encoder/model.safetensors
-wget -P ./anything-v4.0/text_encoder/ https://huggingface.co/andite/anything-v4.0/resolve/main/text_encoder/pytorch_model.bin 
-wget -P ./anything-v4.0/unet/ https://huggingface.co/andite/anything-v4.0/resolve/main/unet/diffusion_pytorch_model.bin
-wget -P ./anything-v4.0/unet/ https://huggingface.co/andite/anything-v4.0/resolve/main/unet/diffusion_pytorch_model.safetensors
-wget -P ./anything-v4.0/vae/ https://huggingface.co/andite/anything-v4.0/resolve/main/vae/diffusion_pytorch_model.bin
-wget -P ./anything-v4.0/vae/ https://huggingface.co/andite/anything-v4.0/resolve/main/vae/diffusion_pytorch_model.safetensors
+wget -P ./anything-v4.0/safety_checker/ https://huggingface.co/xyn-ai/anything-v4.0/resolve/main/safety_checker/model.safetensors
+wget -P ./anything-v4.0/safety_checker/ https://huggingface.co/xyn-ai/anything-v4.0/resolve/main/safety_checker/pytorch_model.bin
+wget -P ./anything-v4.0/text_encoder/ https://huggingface.co/xyn-ai/anything-v4.0/resolve/main/text_encoder/model.safetensors
+wget -P ./anything-v4.0/text_encoder/ https://huggingface.co/xyn-ai/anything-v4.0/resolve/main/text_encoder/pytorch_model.bin
+wget -P ./anything-v4.0/unet/ https://huggingface.co/xyn-ai/anything-v4.0/resolve/main/unet/diffusion_pytorch_model.bin
+wget -P ./anything-v4.0/unet/ https://huggingface.co/xyn-ai/anything-v4.0/resolve/main/unet/diffusion_pytorch_model.safetensors
+wget -P ./anything-v4.0/vae/ https://huggingface.co/xyn-ai/anything-v4.0/resolve/main/vae/diffusion_pytorch_model.bin
+wget -P ./anything-v4.0/vae/ https://huggingface.co/xyn-ai/anything-v4.0/resolve/main/vae/diffusion_pytorch_model.safetensors
 
 GIT_LFS_SKIP_SMUDGE=1 git clone https://huggingface.co/stabilityai/stable-diffusion-2-inpainting
 rm -rf ./stable-diffusion-2-inpainting/**/*.bin
@@ -76,9 +76,9 @@ git clone https://huggingface.co/shgao/edit-anything-v0-3
 
 
 declare -a files=(
-    "./weights/sam_vit_h_4b8939.pth"
-    "./weights/swinbase_part_0a0000.pth"
-    "./weights/groundingdino_swinb_cogcoor.pth"
+    "./sam_vit_h_4b8939.pth"
+    "./swinbase_part_0a0000.pth"
+    "./groundingdino_swinb_cogcoor.pth"
     "./anything-v4.0/safety_checker/model.safetensors"
     "./anything-v4.0/safety_checker/pytorch_model.bin"
     "./anything-v4.0/text_encoder/model.safetensors"

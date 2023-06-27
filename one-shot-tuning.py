@@ -488,11 +488,11 @@ def main(
 
 
 adapter_paths={
-    "pose":"[your path]/t2iadapter_openpose_sd14v1.pth",
-    "sketch":"[your path]/t2iadapter_sketch_sd14v1.pth",
-    "seg": "[your path]/t2iadapter_seg_sd14v1.pth",
-    "depth":"[your path]/t2iadapter_depth_sd14v1.pth",
-    "canny":"[your path]/t2iadapter_canny_sd14v1.pth"
+    "pose":"weights/T2I-Adapter/models/t2iadapter_openpose_sd14v1.pth",
+    "sketch":"weights/T2I-Adapter/models/t2iadapter_sketch_sd14v1.pth",
+    "seg": "weights/T2I-Adapter/models/t2iadapter_seg_sd14v1.pth",
+    "depth":"weights/T2I-Adapter/models/t2iadapter_depth_sd14v1.pth",
+    "canny":"weights/T2I-Adapter/models/t2iadapter_canny_sd14v1.pth"
 }
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

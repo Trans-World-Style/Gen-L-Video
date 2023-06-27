@@ -10,11 +10,11 @@ train_data:
   height: 512
   sample_start_idx: 0
   sample_frame_rate: 2
-controlnet_path: "shgao/edit-anything-v0-3"
+controlnet_path: "weights/edit-anything-v0-3"
 controlnet_scale: 0.8
 mask_prompt: "sunglasses"
-sam_checkpoint: "[your path]/sam_vit_h_4b8939.pth"
-groundingdino_checkpoint: "[your path]/groundingdino_swinb_cogcoor.pth"
+sam_checkpoint: "weights/sam_vit_h_4b8939.pth"
+groundingdino_checkpoint: "weights/groundingdino_swinb_cogcoor.pth"
 groundingdino_config_file: "./GroundingDINO/groundingdino/config/GroundingDINO_SwinB.cfg.py"
 validation_data:
   prompts:
