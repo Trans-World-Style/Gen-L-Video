@@ -13,9 +13,9 @@ pretrained_model_path = "weights/anything-v4.0"
 # device_map = infer_auto_device_map(tokenizer, max_memory={0: "16GiB", 1: "16GiB", "cpu": "24GiB"})
 # print(device_map)
 
-text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
-device_map = infer_auto_device_map(text_encoder, max_memory={0: "16GiB", 1: "16GiB", "cpu": "24GiB"})
-print(device_map)
+# text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
+# device_map = infer_auto_device_map(text_encoder, max_memory={0: "16GiB", 1: "16GiB", "cpu": "24GiB"})
+# print(device_map)
 
 vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae")
 device_map = infer_auto_device_map(vae, max_memory={0: "16GiB", 1: "16GiB", "cpu": "24GiB"})
