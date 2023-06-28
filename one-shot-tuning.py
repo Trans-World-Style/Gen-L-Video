@@ -285,13 +285,11 @@ def main(
     elif accelerator.mixed_precision == "bf16":
         weight_dtype = torch.bfloat16
 
-    check_gpu()
     # Move text_encode and vae to gpu and cast to weight_dtype
     if adapter is not None:
         adapter.to(accelerator.device, dtype=weight_dtype)
     text_encoder.to(accelerator.device, dtype=weight_dtype)
     vae.to(accelerator.device, dtype=weight_dtype)
-    check_gpu()
 
     # We need to recalculate our total training steps as the size of the training dataloader may have changed.
     num_update_steps_per_epoch = math.ceil(len(train_dataloader) / gradient_accumulation_steps)
@@ -347,8 +345,8 @@ def main(
                 if step % gradient_accumulation_steps == 0:
                     progress_bar.update(1)
                 continue
-            # max_memory_allocated = torch.cuda.max_memory_allocated() / (1024 ** 3) 
-            # print(f"max memory allocated: {max_memory_allocated:.3f} GB.")
+            max_memory_allocated = torch.cuda.max_memory_allocated() / (1024 ** 3)
+            print(f"max memory allocated: {max_memory_allocated:.3f} GB.")
             with accelerator.accumulate(unet):
                 # Convert videos to latent space
                 pixel_values = batch["pixel_values"].to(weight_dtype)
