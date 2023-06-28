@@ -184,8 +184,6 @@ def main(
     for m_parent, m, name in zip(m_parents,ms,ns):
         m_parent._modules[name] = get_lora(m,r=lora_r, stride=validation_data.stride,num_loras=50)
 
-    check_gpu()
-    print('---------------')
 
     # Freeze vae and text_encoder
     vae.requires_grad_(False)
@@ -230,9 +228,6 @@ def main(
         weight_decay=adam_weight_decay,
         eps=adam_epsilon,
     )
-
-    check_gpu()
-    print('---------------')
 
     # Get the training dataset
     train_data["stride"] = validation_data["stride"] 
@@ -332,6 +327,7 @@ def main(
     progress_bar = tqdm(range(global_step, max_train_steps), disable=not accelerator.is_local_main_process)
     progress_bar.set_description("Steps")
 
+    check_gpu()
 
     train_loss_avg = 0.0
     for epoch in range(first_epoch, num_train_epochs):
