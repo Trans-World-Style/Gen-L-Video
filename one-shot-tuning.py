@@ -168,6 +168,9 @@ def main(
     vae.to(device_map_vae)
     unet.to(device_map_unet)
 
+    print(f'device_map_vae: {device_map_vae}')
+    print(f'device_map_unet: {device_map_unet}')
+
     if adapter_path is not None:
         adapter = Adapter(
             cin=64 * 3 if ("sketch" not in adapter_path and "canny" not in adapter_path) else 64*1,
