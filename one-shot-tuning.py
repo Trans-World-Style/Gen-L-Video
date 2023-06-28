@@ -108,13 +108,12 @@ def main(
     accelerator = Accelerator(
         gradient_accumulation_steps=gradient_accumulation_steps,
         mixed_precision=mixed_precision,
-        device_placement=True,
-        cpu=True
     )
 
-    # Make one log on every process with the configuration for debugging.
-    print(f'device count: {torch.cuda.device_count()}')
+    print(f'accelerator device: \n{accelerator.device}')
+    print(f'accelerator state: \n{accelerator.state}')
 
+    # Make one log on every process with the configuration for debugging.
     logger.info(accelerator.state, main_process_only=False)
     if accelerator.is_local_main_process:
         transformers.utils.logging.set_verbosity_warning()
