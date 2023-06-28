@@ -40,6 +40,20 @@ check_min_version("0.10.0.dev0")
 logger = get_logger(__name__, log_level="INFO")
 
 
+def check_gpu():
+    import GPUtil
+
+    # GPU 정보를 가져옴
+    gpus = GPUtil.getGPUs()
+
+    # 각 GPU의 정보 출력
+    for gpu in gpus:
+        print(f"GPU {gpu.id}: {gpu.name}")
+        print(f"  Free Memory: {gpu.memoryFree}MB")
+        print(f"  Used Memory: {gpu.memoryUsed}MB")
+        print(f"  Total Memory: {gpu.memoryTotal}MB")
+        print("")
+
 def main(
     pretrained_model_path: str,
     output_dir: str,
@@ -132,18 +146,6 @@ def main(
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
     print('%% unet loaded %%')
 
-    import GPUtil
-
-    # GPU 정보를 가져옴
-    gpus = GPUtil.getGPUs()
-
-    # 각 GPU의 정보 출력
-    for gpu in gpus:
-        print(f"GPU {gpu.id}: {gpu.name}")
-        print(f"  Free Memory: {gpu.memoryFree}MB")
-        print(f"  Used Memory: {gpu.memoryUsed}MB")
-        print(f"  Total Memory: {gpu.memoryTotal}MB")
-        print("")
 
     if adapter_path is not None:
         adapter = Adapter(
@@ -181,7 +183,9 @@ def main(
             m_parents.append(m_parent)
     for m_parent, m, name in zip(m_parents,ms,ns):
         m_parent._modules[name] = get_lora(m,r=lora_r, stride=validation_data.stride,num_loras=50)
-    
+
+    check_gpu()
+    print('---------------')
 
     # Freeze vae and text_encoder
     vae.requires_grad_(False)
@@ -226,6 +230,9 @@ def main(
         weight_decay=adam_weight_decay,
         eps=adam_epsilon,
     )
+
+    check_gpu()
+    print('---------------')
 
     # Get the training dataset
     train_data["stride"] = validation_data["stride"] 
