@@ -327,8 +327,6 @@ def main(
     progress_bar = tqdm(range(global_step, max_train_steps), disable=not accelerator.is_local_main_process)
     progress_bar.set_description("Steps")
 
-    check_gpu()
-
     train_loss_avg = 0.0
     for epoch in range(first_epoch, num_train_epochs):
         unet.train()
@@ -346,6 +344,8 @@ def main(
                 pixel_values = batch["pixel_values"].to(weight_dtype)
                 video_length = pixel_values.shape[1]
                 pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
+                print(f'step: {step}')
+                check_gpu()
                 latents = vae.encode(pixel_values).latent_dist.sample()
                 latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
                 latents = latents * 0.18215
