@@ -160,10 +160,6 @@ def main(
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
     print('%% unet loaded %%')
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    if torch.cuda.device_count() > 1:
-        unet = DataParallel(unet)
-
     if adapter_path is not None:
         adapter = Adapter(
             cin=64 * 3 if ("sketch" not in adapter_path and "canny" not in adapter_path) else 64*1,
@@ -345,6 +341,9 @@ def main(
     progress_bar.set_description("Steps")
 
     train_loss_avg = 0.0
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if torch.cuda.device_count() > 1:
+        unet = DataParallel(unet)
     for epoch in range(first_epoch, num_train_epochs):
         unet.train()
         train_loss = 0.0
