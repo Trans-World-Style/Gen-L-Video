@@ -122,11 +122,16 @@ def main(
     )
     # Load scheduler, tokenizer and models.
     noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
+    print('%% scheduler loaded %%')
     tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
+    print('%% tokenizer loaded %%')
     text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
+    print('%% text_encoder loaded %%')
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae")
+    print('%% vae loaded %%')
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
-    
+    print('%% unet loaded %%')
+
     if adapter_path is not None:
         adapter = Adapter(
             cin=64 * 3 if ("sketch" not in adapter_path and "canny" not in adapter_path) else 64*1,
