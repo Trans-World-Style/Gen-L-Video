@@ -108,7 +108,7 @@ def main(
     accelerator = Accelerator(
         gradient_accumulation_steps=gradient_accumulation_steps,
         mixed_precision=mixed_precision,
-        split_batches=True
+        device_placement=False
     )
 
     print(f'accelerator device: \n{accelerator.device}')
