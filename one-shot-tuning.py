@@ -108,11 +108,12 @@ def main(
     accelerator = Accelerator(
         gradient_accumulation_steps=gradient_accumulation_steps,
         mixed_precision=mixed_precision,
-        device_placement=True
+        device_placement=True,
+        cpu=True
     )
 
     # Make one log on every process with the configuration for debugging.
-    
+    print(f'device count: {torch.cuda.device_count()}')
 
     logger.info(accelerator.state, main_process_only=False)
     if accelerator.is_local_main_process:
