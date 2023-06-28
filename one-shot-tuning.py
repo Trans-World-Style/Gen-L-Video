@@ -5,6 +5,8 @@ import inspect
 import math
 import os
 from typing import Dict, Optional, Tuple
+
+from accelerate.data_loader import DataLoaderShard
 from omegaconf import OmegaConf
 import sys
 
@@ -265,6 +267,9 @@ def main(
     train_dataloader = torch.utils.data.DataLoader(
         train_dataset, batch_size=train_batch_size, shuffle=True, 
     )
+
+    train_dataloader = DataLoaderShard(train_dataloader, num_shards=accelerator.num_processes,
+                                       num_replicas=accelerator.num_processes)
 
     # Get the validation pipeline
     validation_pipeline = OneShotTuningPipeline(
