@@ -9,11 +9,11 @@ pretrained_model_path = "weights/anything-v4.0"
 
 with init_empty_weights():
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae")
-    device_map = infer_auto_device_map(vae, max_memory={0: "16GiB", 1: "16GiB", "cpu": "24GiB"})
+    device_map = infer_auto_device_map(vae, max_memory={0: "8GiB", 1: "8GiB", "cpu": "24GiB"})
     print(device_map)
 
 with init_empty_weights():
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
-    device_map = infer_auto_device_map(unet, max_memory={0: "16GiB", 1: "16GiB", "cpu": "24GiB"})
+    device_map = infer_auto_device_map(unet, max_memory={0: "8GiB", 1: "8GiB", "cpu": "24GiB"})
     print(device_map)
 

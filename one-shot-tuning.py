@@ -158,6 +158,13 @@ def main(
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
     print('%% unet loaded %%')
 
+    # Generate device_map for each model using infer_auto_device_map
+    device_map_vae = infer_auto_device_map(vae, max_memory={0: "8GiB", 1: "8GiB", "cpu": "24GiB"})
+    device_map_unet = infer_auto_device_map(unet, max_memory={0: "8GiB", 1: "8GiB", "cpu": "24GiB"})
+
+    # Move models to appropriate devices
+    vae.to(device_map_vae)
+    unet.to(device_map_unet)
 
     if adapter_path is not None:
         adapter = Adapter(
