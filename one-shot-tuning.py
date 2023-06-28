@@ -39,6 +39,15 @@ check_min_version("0.10.0.dev0")
 
 logger = get_logger(__name__, log_level="INFO")
 
+def getEnv():
+    import os
+
+    # CUDA 관련 환경변수 목록
+    cuda_envs = ["CUDA_HOME", "CUDA_DEVICE_ORDER", "CUDA_VISIBLE_DEVICES", "PATH", "LD_LIBRARY_PATH", "PYTORCH_CUDA_ALLOC_CONF"]
+
+    # CUDA 관련 환경변수 출력
+    for env in cuda_envs:
+        print(f"{env}: {os.environ.get(env)}")
 
 def check_gpu():
     import GPUtil
@@ -102,7 +111,7 @@ def main(
 
     # Make one log on every process with the configuration for debugging.
     
-    
+    getEnv()
 
     logger.info(accelerator.state, main_process_only=False)
     if accelerator.is_local_main_process:
@@ -344,8 +353,6 @@ def main(
                 pixel_values = batch["pixel_values"].to(weight_dtype)
                 video_length = pixel_values.shape[1]
                 pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
-                print(f'step: {step}')
-                check_gpu()
                 latents = vae.encode(pixel_values).latent_dist.sample()
                 latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
                 latents = latents * 0.18215
