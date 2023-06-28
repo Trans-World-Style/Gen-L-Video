@@ -47,4 +47,3 @@ clip_drop_prob: [[200,0.4]]
 lora_r: 16
 scale_lr: True
 run_isolated: False
-num_processes: 1
