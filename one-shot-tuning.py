@@ -24,6 +24,7 @@ from diffusers import AutoencoderKL, DDPMScheduler, DDIMScheduler
 from diffusers.optimization import get_scheduler
 from diffusers.utils import check_min_version
 from diffusers.utils.import_utils import is_xformers_available
+from torch.nn import DataParallel
 from tqdm.auto import tqdm
 from transformers import CLIPTextModel, CLIPTokenizer
 import pandas as pd
@@ -110,7 +111,6 @@ def main(
     accelerator = Accelerator(
         gradient_accumulation_steps=gradient_accumulation_steps,
         mixed_precision=mixed_precision,
-        device_map="auto"
     )
 
     print(f'accelerator device: \n{accelerator.device}')
@@ -160,15 +160,9 @@ def main(
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
     print('%% unet loaded %%')
 
-    # # Generate device_map for each model using infer_auto_device_map
-    # device_map_vae = infer_auto_device_map(vae, max_memory={0: "8GiB", 1: "8GiB", "cpu": "24GiB"})
-    # device_map_unet = infer_auto_device_map(unet, max_memory={0: "8GiB", 1: "8GiB", "cpu": "24GiB"})
-    # print(f'device_map_vae: {device_map_vae}')
-    # print(f'device_map_unet: {device_map_unet}')
-    #
-    # # Move models to appropriate devices
-    # vae.to(device_map_vae)
-    # unet.to(device_map_unet)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if torch.cuda.device_count() > 1:
+        unet = DataParallel(unet)
 
     if adapter_path is not None:
         adapter = Adapter(
@@ -270,9 +264,6 @@ def main(
         train_dataset, batch_size=train_batch_size, shuffle=True, 
     )
 
-    train_dataloader = DataLoaderShard(train_dataloader, num_shards=accelerator.num_processes,
-                                       num_replicas=accelerator.num_processes)
-
     # Get the validation pipeline
     validation_pipeline = OneShotTuningPipeline(
         vae=vae, text_encoder=text_encoder, tokenizer=tokenizer, unet=unet,
@@ -358,6 +349,9 @@ def main(
         unet.train()
         train_loss = 0.0
         for step, batch in enumerate(train_dataloader):
+            for key in batch:
+                if isinstance(batch[key], torch.Tensor):
+                    batch[key] = batch[key].to(device)
             # Skip steps until we reach the resumed step
             if resume_from_checkpoint and epoch == first_epoch and step < resume_step:
                 if step % gradient_accumulation_steps == 0:
