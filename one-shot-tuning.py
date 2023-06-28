@@ -132,6 +132,19 @@ def main(
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
     print('%% unet loaded %%')
 
+    import GPUtil
+
+    # GPU 정보를 가져옴
+    gpus = GPUtil.getGPUs()
+
+    # 각 GPU의 정보 출력
+    for gpu in gpus:
+        print(f"GPU {gpu.id}: {gpu.name}")
+        print(f"  Free Memory: {gpu.memoryFree}MB")
+        print(f"  Used Memory: {gpu.memoryUsed}MB")
+        print(f"  Total Memory: {gpu.memoryTotal}MB")
+        print("")
+
     if adapter_path is not None:
         adapter = Adapter(
             cin=64 * 3 if ("sketch" not in adapter_path and "canny" not in adapter_path) else 64*1,
