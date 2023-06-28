@@ -108,7 +108,7 @@ def main(
     accelerator = Accelerator(
         gradient_accumulation_steps=gradient_accumulation_steps,
         mixed_precision=mixed_precision,
-        device_map='auto'
+        device_placement=True
     )
 
     # Make one log on every process with the configuration for debugging.
