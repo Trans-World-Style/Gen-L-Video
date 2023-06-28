@@ -5,9 +5,9 @@ from accelerate import infer_auto_device_map
 
 pretrained_model_path = "weights/anything-v4.0"
 
-noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
-device_map = infer_auto_device_map(noise_scheduler, max_memory={0: "16GiB", 1: "16GiB", "cpu": "24GiB"})
-print(device_map)
+# noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
+# device_map = infer_auto_device_map(noise_scheduler, max_memory={0: "16GiB", 1: "16GiB", "cpu": "24GiB"})
+# print(device_map)
 
 tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
 device_map = infer_auto_device_map(tokenizer, max_memory={0: "16GiB", 1: "16GiB", "cpu": "24GiB"})
