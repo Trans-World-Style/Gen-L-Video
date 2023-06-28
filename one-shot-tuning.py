@@ -19,12 +19,10 @@ import transformers
 from accelerate import Accelerator
 from accelerate.logging import get_logger
 from accelerate.utils import set_seed
-from accelerate import infer_auto_device_map, init_empty_weights
 from diffusers import AutoencoderKL, DDPMScheduler, DDIMScheduler
 from diffusers.optimization import get_scheduler
 from diffusers.utils import check_min_version
 from diffusers.utils.import_utils import is_xformers_available
-from torch.nn import DataParallel
 from tqdm.auto import tqdm
 from transformers import CLIPTextModel, CLIPTokenizer
 import pandas as pd
@@ -341,16 +339,11 @@ def main(
     progress_bar.set_description("Steps")
 
     train_loss_avg = 0.0
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    if torch.cuda.device_count() > 1:
-        unet = DataParallel(unet)
+
     for epoch in range(first_epoch, num_train_epochs):
         unet.train()
         train_loss = 0.0
         for step, batch in enumerate(train_dataloader):
-            for key in batch:
-                if isinstance(batch[key], torch.Tensor):
-                    batch[key] = batch[key].to(device)
             # Skip steps until we reach the resumed step
             if resume_from_checkpoint and epoch == first_epoch and step < resume_step:
                 if step % gradient_accumulation_steps == 0:
