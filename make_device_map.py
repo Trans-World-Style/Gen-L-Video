@@ -5,7 +5,7 @@ from accelerate import infer_auto_device_map
 from accelerate import init_empty_weights
 
 # pretrained_model_path = "weights/anything-v4.0"
-pretrained_model_path = "xyn-ai/anything-v4.0"
+pretrained_model_path = "./weights/anything-v4.0"
 
 from transformers import AutoConfig, AutoModelForCausalLM
 
