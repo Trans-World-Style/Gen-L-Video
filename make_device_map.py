@@ -17,7 +17,7 @@ from transformers import AutoConfig, AutoModelForCausalLM
 
 with init_empty_weights():
     # vae = AutoModelForCausalLM.from_config(config)
-    vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae")
+    vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map="auto")
     # vae = load_checkpoint_and_dispatch(vae, device_map='auto')
     # print(vae.hf_device_map)
     device_map = infer_auto_device_map(vae, max_memory={0: "8GiB", 1: "8GiB", "cpu": "24GiB"})
