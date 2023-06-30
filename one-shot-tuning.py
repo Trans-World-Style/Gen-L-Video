@@ -180,10 +180,6 @@ def main(
     unet.controlnet_scale = controlnet_scale
     
     # inject_trainable_lora(unet,["CrossAttentionWithLora"],r=lora_r,stride=validation_data.stride)
-    print('module of unet: ')
-    for xxx in unet.named_modules():
-        print(xxx)
-    print("===================")
     ns, ms, m_parents = [], [], []
     for n, m in unet.named_modules():
         if ("attn1" in n) and "to_q" in n:
@@ -227,6 +223,7 @@ def main(
     if use_8bit_adam:
         try:
             import bitsandbytes as bnb
+            print('8bit adam import')
         except ImportError:
             raise ImportError(
                 "Please install bitsandbytes to use 8-bit Adam. You can do so by running `pip install bitsandbytes`"
