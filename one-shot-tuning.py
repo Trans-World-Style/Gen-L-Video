@@ -369,6 +369,8 @@ def main(
                 latents = vae.encode(pixel_values).latent_dist.sample()
                 latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
                 latents = latents * 0.18215
+
+                print(f'latents: {latents.device}')
                 
                 clip_id = batch["clip_id"]
 
