@@ -158,7 +158,6 @@ def main(
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
     print('%% unet loaded %%')
 
-    check_gpu()
 
     if adapter_path is not None:
         adapter = Adapter(
@@ -181,7 +180,9 @@ def main(
     unet.controlnet_scale = controlnet_scale
     
     # inject_trainable_lora(unet,["CrossAttentionWithLora"],r=lora_r,stride=validation_data.stride)
-    
+    print('module of unet: ')
+    print(unet.named_modules())
+    print("===================")
     ns, ms, m_parents = [], [], []
     for n, m in unet.named_modules():
         if ("attn1" in n) and "to_q" in n:
