@@ -223,7 +223,6 @@ def main(
     if use_8bit_adam:
         try:
             import bitsandbytes as bnb
-            print('8bit adam import')
         except ImportError:
             raise ImportError(
                 "Please install bitsandbytes to use 8-bit Adam. You can do so by running `pip install bitsandbytes`"
@@ -289,11 +288,11 @@ def main(
     elif accelerator.mixed_precision == "bf16":
         weight_dtype = torch.bfloat16
 
-    # Move text_encode and vae to gpu and cast to weight_dtype
-    if adapter is not None:
-        adapter.to(accelerator.device, dtype=weight_dtype)
-    text_encoder.to(accelerator.device, dtype=weight_dtype)
-    vae.to(accelerator.device, dtype=weight_dtype)
+    # # Move text_encode and vae to gpu and cast to weight_dtype
+    # if adapter is not None:
+    #     adapter.to(accelerator.device, dtype=weight_dtype)
+    # text_encoder.to(accelerator.device, dtype=weight_dtype)
+    # vae.to(accelerator.device, dtype=weight_dtype)
 
     # We need to recalculate our total training steps as the size of the training dataloader may have changed.
     num_update_steps_per_epoch = math.ceil(len(train_dataloader) / gradient_accumulation_steps)
