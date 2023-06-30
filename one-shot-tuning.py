@@ -54,6 +54,7 @@ def getEnv():
 def check_gpu(message=None):
     import GPUtil
 
+    print('--------------------')
     if message is not None:
         print(message)
 
@@ -155,7 +156,7 @@ def main(
     print('%% scheduler loaded %%')
     tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer", device_map=device_map)
     print('%% tokenizer loaded %%')
-    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
+    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
     print('%% text_encoder loaded %%')
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     print('%% vae loaded %%')
@@ -299,7 +300,7 @@ def main(
     # vae.to(accelerator.device, dtype=weight_dtype)
     if adapter is not None:
         adapter.to(dtype=weight_dtype)
-    text_encoder.to(dtype=weight_dtype)
+    text_encoder.to(accelerator.device, dtype=weight_dtype)
     vae.to(dtype=weight_dtype)
 
     # We need to recalculate our total training steps as the size of the training dataloader may have changed.
