@@ -357,7 +357,7 @@ def main(
                 video_length = pixel_values.shape[1]
                 pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
                 check_gpu()
-                print(f'dtype: {pixel_values.dtype}')
+                print(f'dtype: {vae.encode(pixel_values).dtype}')
                 latents = vae.encode(pixel_values).latent_dist.sample()
                 latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
                 latents = latents * 0.18215
