@@ -372,7 +372,7 @@ def main(
 
                 print(f'latents: {latents.device}')
                 
-                clip_id = batch["clip_id"]
+                clip_id = batch["clip_id"].to(device=latents.device)
 
                 # Sample noise that we'll add to the latents
                 noise = torch.randn_like(latents)
