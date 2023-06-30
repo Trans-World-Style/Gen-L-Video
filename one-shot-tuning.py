@@ -147,15 +147,15 @@ def main(
         ],
     )
     # Load scheduler, tokenizer and models.
-    noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
+    noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map='auto')
     print('%% scheduler loaded %%')
-    tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
+    tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer", device_map='auto')
     print('%% tokenizer loaded %%')
-    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
+    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map='auto')
     print('%% text_encoder loaded %%')
-    vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae")
+    vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map='auto')
     print('%% vae loaded %%')
-    unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
+    unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map='auto')
     print('%% unet loaded %%')
 
 
