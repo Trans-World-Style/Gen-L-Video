@@ -9,7 +9,7 @@ pretrained_model_path = "xyn-ai/anything-v4.0"
 
 from transformers import AutoConfig, AutoModelForCausalLM
 
-config = AutoConfig.from_pretrained(pretrained_model_path)
+config = AutoConfig.from_pretrained(pretrained_model_path, subfolder='vae')
 
 with init_empty_weights():
     vae = AutoModelForCausalLM.from_config(config)
