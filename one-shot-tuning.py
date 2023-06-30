@@ -156,7 +156,7 @@ def main(
     print('%% scheduler loaded %%')
     tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer", device_map=device_map)
     print('%% tokenizer loaded %%')
-    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
+    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
     print('%% text_encoder loaded %%')
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     print('%% vae loaded %%')
@@ -300,7 +300,7 @@ def main(
     # vae.to(accelerator.device, dtype=weight_dtype)
     if adapter is not None:
         adapter.to(dtype=weight_dtype)
-    text_encoder.to(accelerator.device, dtype=weight_dtype)
+    text_encoder.to(dtype=weight_dtype)
     vae.to(dtype=weight_dtype)
 
     # We need to recalculate our total training steps as the size of the training dataloader may have changed.
@@ -383,6 +383,9 @@ def main(
                 # (this is the forward diffusion process)
                 noisy_latents = noise_scheduler.add_noise(latents, noise, timesteps)
                 check_gpu('before encoder hidden states')
+                print(f'mask: {mask.device}')
+                print(f'batch: {batch.device}')
+
                 # Get the text embedding for conditioning
                 mask = torch.from_numpy(np.random.choice([1.0,0.0],size=bsz,p=[cond_prob, 1-cond_prob])).to(latents.device,weight_dtype)
                 mask = mask.unsqueeze(1).unsqueeze(2)
