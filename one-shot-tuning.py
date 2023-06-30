@@ -51,8 +51,11 @@ def getEnv():
     for env in cuda_envs:
         print(f"{env}: {os.environ.get(env)}")
 
-def check_gpu():
+def check_gpu(message=None):
     import GPUtil
+
+    if message is not None:
+        print(message)
 
     # GPU 정보를 가져옴
     gpus = GPUtil.getGPUs()
@@ -361,7 +364,7 @@ def main(
                 pixel_values = batch["pixel_values"].to(weight_dtype)
                 video_length = pixel_values.shape[1]
                 pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
-                check_gpu()
+                check_gpu('before vae encode')
                 latents = vae.encode(pixel_values).latent_dist.sample()
                 latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
                 latents = latents * 0.18215
@@ -378,7 +381,7 @@ def main(
                 # Add noise to the latents according to the noise magnitude at each timestep
                 # (this is the forward diffusion process)
                 noisy_latents = noise_scheduler.add_noise(latents, noise, timesteps)
-
+                check_gpu('before encoder hidden states')
                 # Get the text embedding for conditioning
                 mask = torch.from_numpy(np.random.choice([1.0,0.0],size=bsz,p=[cond_prob, 1-cond_prob])).to(latents.device,weight_dtype)
                 mask = mask.unsqueeze(1).unsqueeze(2)
