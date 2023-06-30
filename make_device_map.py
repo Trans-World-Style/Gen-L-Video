@@ -24,9 +24,9 @@ with init_empty_weights():
     print(device_map)
 
 # config = AutoConfig.from_pretrained(f'{pretrained_model_path}', subfolder='unet')
-# with init_empty_weights():
-#     # unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
-#     unet = AutoModelForCausalLM.from_config(config)
-#     device_map = infer_auto_device_map(unet, max_memory={0: "8GiB", 1: "8GiB", "cpu": "24GiB"})
-#     print(device_map)
+with init_empty_weights():
+    unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map="auto")
+    # unet = AutoModelForCausalLM.from_config(config)
+    device_map = infer_auto_device_map(unet, max_memory={0: "8GiB", 1: "8GiB", "cpu": "24GiB"})
+    print(device_map)
 
