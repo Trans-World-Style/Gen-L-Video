@@ -425,7 +425,7 @@ def main(
                 print(f'clip_id: {clip_id.device}')
                 print(f'encoder_hidden_states: {encoder_hidden_states.device}')
                 print(f'control: {control.device}')
-                model_pred = unet(noisy_latents, timesteps, clip_id, encoder_hidden_states,control=control).sample
+                model_pred = unet(noisy_latents.to(unet.device), timesteps.to(unet.device), clip_id.to(unet.device), encoder_hidden_states.to(unet.device),control=control).sample
                 loss = F.mse_loss(model_pred.float(), target.float(), reduction="mean")
                 # Gather the losses across all processes for logging (if we use distributed training).
                 avg_loss = accelerator.gather(loss.repeat(train_batch_size)).mean()
