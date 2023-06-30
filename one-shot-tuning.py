@@ -389,7 +389,8 @@ def main(
                 mask = mask.unsqueeze(1).unsqueeze(2)
 
                 print(f'mask: {mask.device}')
-                print(f'batch: {batch.device}')
+                print(f'batch(prompt_ids): {batch["prompt_ids"].device}')
+                print(f'batch(null_prompt_ids): {batch["null_prompt_ids"].device}')
 
                 encoder_hidden_states = text_encoder(batch["prompt_ids"])[0] * mask + text_encoder(batch["null_prompt_ids"])[0] * (1-mask)
                 # Get the target for loss depending on the prediction type
