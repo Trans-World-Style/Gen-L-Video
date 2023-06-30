@@ -394,7 +394,7 @@ def main(
                 print(f'batch(prompt_ids): {batch["prompt_ids"].device}')
                 print(f'batch(null_prompt_ids): {batch["null_prompt_ids"].device}')
 
-                encoder_hidden_states = text_encoder(batch["prompt_ids"])[0] * mask + text_encoder(batch["null_prompt_ids"])[0] * (1-mask)
+                encoder_hidden_states = text_encoder(batch["prompt_ids"].to(latents.device,weight_dtype))[0] * mask + text_encoder(batch["null_prompt_ids"].to(latents.device,weight_dtype))[0] * (1-mask)
                 # Get the target for loss depending on the prediction type
                 if noise_scheduler.prediction_type == "epsilon":
                     target = noise
