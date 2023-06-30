@@ -409,6 +409,7 @@ def main(
                         continue
                     mask = torch.from_numpy(np.random.choice([1,0],size=bsz,p=[prob, 1-prob])).to(latents.device).long()
                     break
+                check_gpu('before clip id')
                 if sum(mask == 0) == 0:
                     clip_id = None
                 else:
