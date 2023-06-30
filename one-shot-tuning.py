@@ -158,6 +158,8 @@ def main(
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
     print('%% unet loaded %%')
 
+    check_gpu()
+
     if adapter_path is not None:
         adapter = Adapter(
             cin=64 * 3 if ("sketch" not in adapter_path and "canny" not in adapter_path) else 64*1,
