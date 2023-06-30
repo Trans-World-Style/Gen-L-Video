@@ -181,7 +181,8 @@ def main(
     
     # inject_trainable_lora(unet,["CrossAttentionWithLora"],r=lora_r,stride=validation_data.stride)
     print('module of unet: ')
-    print(unet.named_modules())
+    for xxx in unet.named_modules():
+        print(xxx)
     print("===================")
     ns, ms, m_parents = [], [], []
     for n, m in unet.named_modules():
