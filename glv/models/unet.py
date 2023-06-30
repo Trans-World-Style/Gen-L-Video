@@ -478,7 +478,7 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         return UNet3DConditionOutput(sample=sample)
 
     @classmethod
-    def from_pretrained_2d(cls, pretrained_model_path, subfolder=None):
+    def from_pretrained_2d(cls, pretrained_model_path, subfolder=None, device_map=None):
         if subfolder is not None:
             pretrained_model_path = os.path.join(pretrained_model_path, subfolder)
 
@@ -503,7 +503,7 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         ]
 
         from diffusers.utils import WEIGHTS_NAME,SAFETENSORS_WEIGHTS_NAME
-        model = cls.from_config(config, device_map='auto')
+        model = cls.from_config(config, device_map=device_map)
         model_file = os.path.join(pretrained_model_path, WEIGHTS_NAME)
         if not os.path.isfile(model_file):
             model_file = os.path.join(pretrained_model_path,SAFETENSORS_WEIGHTS_NAME)
