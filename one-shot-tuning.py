@@ -181,10 +181,10 @@ def main(
     # unet.to(accelerator.device, dtype=torch.float16)
     # text_encoder.to(accelerator.device, dtype=torch.float16)
     # vae.to(accelerator.device, dtype=torch.float16)
-    check_gpu('hihi')
-    print(vae.device)
-    print(unet.device)
-    return
+    # check_gpu('hihi')
+    # print(vae.device)
+    # print(unet.device)
+    # return
 
 
     if adapter_path is not None:
