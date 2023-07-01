@@ -166,20 +166,25 @@ def main(
     # device_map = 'balanced_low_0'
     device_map = 'sequential'
     # Load scheduler, tokenizer and models.
-    # noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map=device_map)
-    # print('%% scheduler loaded %%')
-    # tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer", device_map=device_map)
-    # print('%% tokenizer loaded %%')
-    # text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
-    # print('%% text_encoder loaded %%')
+    noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map=device_map)
+    print('%% scheduler loaded %%')
+    tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer", device_map=device_map)
+    print('%% tokenizer loaded %%')
+    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
+    print('%% text_encoder loaded %%')
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     print('%% vae loaded %%')
+    unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
+    print('%% unet loaded %%')
+
+    unet.to(accelerator.device, dtype=torch.float16)
+    noise_scheduler.to(accelerator.device, dtype=torch.float16)
+    tokenizer.to(accelerator.device, dtype=torch.float16)
+    text_encoder.to(accelerator.device, dtype=torch.float16)
     vae.to(accelerator.device, dtype=torch.float16)
     check_gpu('hihi')
     print(vae.device)
     return
-    # unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
-    # print('%% unet loaded %%')
 
 
     if adapter_path is not None:
