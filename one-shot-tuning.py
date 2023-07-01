@@ -165,6 +165,7 @@ def main(
     )
     # device_map = 'balanced_low_0'
     device_map = 'sequential'
+    check_gpu('hihi')
     # Load scheduler, tokenizer and models.
     noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map=device_map)
     print('%% scheduler loaded %%')
