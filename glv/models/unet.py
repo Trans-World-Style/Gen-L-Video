@@ -544,8 +544,8 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
                 state_dict.update({k: v})
             if 'id_embedding' in k:
                 state_dict.update({k: v})
-
-        accelerate.load_checkpoint_and_dispatch(model, state_dict, device_map)
+        model.load_state_dict(state_dict)
+        accelerate.load_checkpoint_and_dispatch(model, model_file, device_map)
         # model.register_to_config(_name_or_path=pretrained_model_path)
         model.eval()
         ###########################################################
