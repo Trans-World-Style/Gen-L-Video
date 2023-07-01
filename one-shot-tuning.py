@@ -177,6 +177,7 @@ def main(
     vae.to(accelerator.device, dtype='f16')
     check_gpu('hihi')
     print(vae.device)
+    return
     # unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
     # print('%% unet loaded %%')
 
