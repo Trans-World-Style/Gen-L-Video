@@ -63,11 +63,8 @@ class LoraInjectedLinear(nn.Module):
             if lora_id < 0:
                 return self.linear(input)
 
-            print(f'lin: {self.linear(input)}')
-            print(f'tqtqtq: {self.lora_down[lora_id](input)}')
-            print(f'tqtqtq: {self.selector(self.lora_down[lora_id](input))}')
-            print(f'tqtqtq: {self.lora_up[lora_id](self.selector(self.lora_down[lora_id](input)))}')
-            print(f'tqtqtq: {self.dropout(self.lora_up[lora_id](self.selector(self.lora_down[lora_id](input))))}')
+            print(f'lin: {self.linear(input).shape}')
+            print(f'tqtqtq: {lora_id}  {type(lora_id)}')
             print(f'scale: {self.scale}')
             return (
                 self.linear(input)
