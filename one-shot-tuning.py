@@ -368,9 +368,6 @@ def main(
         unet.train()
         train_loss = 0.0
         for step, batch in enumerate(train_dataloader):
-            for bk, bv in batch.items():
-                print(f'{bk}: {bv.device}')
-            return
             # Skip steps until we reach the resumed step
             if resume_from_checkpoint and epoch == first_epoch and step < resume_step:
                 if step % gradient_accumulation_steps == 0:
@@ -409,7 +406,8 @@ def main(
                 # Get the text embedding for conditioning
                 mask = torch.from_numpy(np.random.choice([1.0,0.0],size=bsz,p=[cond_prob, 1-cond_prob])).to(latents.device,weight_dtype)
                 mask = mask.unsqueeze(1).unsqueeze(2)
-
+                print(f'latents: {latents.device}')
+                print(f'mask: {mask.device}')
                 encoder_hidden_states = text_encoder(batch["prompt_ids"])[0] * mask + text_encoder(batch["null_prompt_ids"])[0] * (1-mask)
 
                 # Get the target for loss depending on the prediction type
