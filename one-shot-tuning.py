@@ -70,7 +70,7 @@ def check_gpu(message=None):
         print("")
 
 
-def to_cuda(num, *args):
+def to_cuda(num, args):
     for i, arg in enumerate(args):
         try:
             print(f"{i}'th arg: ")
