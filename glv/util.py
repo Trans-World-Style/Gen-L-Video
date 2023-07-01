@@ -144,6 +144,8 @@ def ddim_loop_long(pipeline, ddim_scheduler, latent, num_inv_steps, prompt, wind
 
             ##########################
             latent_input = latent_input.to(pipeline.unet.device)
+            control_tmp = control_tmp.to(pipeline.unet.device)
+            cond_embeddings = cond_embeddings.to(pipeline.unet.device)
             ##########################
             noise_pred = get_noise_pred_single(latent_input, t, cond_embeddings, pipeline.unet, t_start,control_tmp)
             latent_view_denoised = next_step(noise_pred, t, latent_view, ddim_scheduler)
