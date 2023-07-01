@@ -423,7 +423,7 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
                 sample = sample.to(self.device)
                 emb = emb.to(self.device)
                 encoder_hidden_states = encoder_hidden_states.to(self.device)
-                attention_mask = attention_mask.to(self.device)
+                # attention_mask = attention_mask.to(self.device)
                 #################
                 sample, res_samples = downsample_block(
                     hidden_states=sample,
