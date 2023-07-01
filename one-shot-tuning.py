@@ -392,6 +392,7 @@ def main(
                 pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
                 ################
                 pixel_values = pixel_values.to(vae.device)
+                check_gpu()
                 ###############
                 latents = vae.encode(pixel_values).latent_dist.sample()
                 check_gpu('encode')
