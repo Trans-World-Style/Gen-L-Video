@@ -74,7 +74,7 @@ def to_cuda(num, args):
     for i, arg in enumerate(args):
         try:
             print(f"{i}'th arg: ")
-            arg = arg.to(device=f'cuda: {num}')
+            arg = arg.to(device=f'cuda:{num}')
         except Exception as e:
             print(f'errer: {type(arg)}')
             print(e)
