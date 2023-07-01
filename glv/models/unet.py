@@ -563,6 +563,7 @@ class Adapter(nn.Module):
         self.conv_in = nn.Conv2d(cin,channels[0], 3, 1, 1)
 
     def forward(self, x):
+        print(f'xxxxxxxxx: {x.dtype}')
         b, c, t, h, w = x.shape
         x = rearrange(x, 'b c t h w -> (b t) c h w')
         # unshuffle
