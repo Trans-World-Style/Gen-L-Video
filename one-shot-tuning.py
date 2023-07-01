@@ -433,7 +433,10 @@ def main(
                 control = batch.get("control_video")
                 if control is not None:
                     control= rearrange(control, "b f c h w -> b c f h w")
-
+                print(f'noisy_latents: {noisy_latents.dtype}')
+                print(f'timesteps: {timesteps.dtype}')
+                print(f'clip_id: {clip_id.dtype}')
+                print(f'encoder_hidden_states: {encoder_hidden_states.dtype}')
                 model_pred = unet(noisy_latents, timesteps, clip_id, encoder_hidden_states,control=control).sample
                 loss = F.mse_loss(model_pred.float(), target.float(), reduction="mean")
                 # Gather the losses across all processes for logging (if we use distributed training).
