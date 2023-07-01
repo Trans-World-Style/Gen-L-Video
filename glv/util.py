@@ -116,9 +116,7 @@ def ddim_inversion_long(pipeline, ddim_scheduler, video_latent, num_inv_steps, p
         depth_map = rearrange(depth_map,"(b f) c h w -> b c f h w",f=video_length)
     else:
         depth_map = None
-    print(f'pipeline: {pipeline.device}')
-    print(f'video_latent: {video_latent.device}')
-    print(f'control: {control.device}')
+
     ddim_latents = ddim_loop_long(pipeline, ddim_scheduler, video_latent, num_inv_steps, prompt, window_size, stride,control,depth_map)
     return ddim_latents
 
@@ -143,6 +141,9 @@ def ddim_loop_long(pipeline, ddim_scheduler, latent, num_inv_steps, prompt, wind
                 latent_input = torch.cat([latent_view,depth_map[:,:,t_start:t_end]],dim=1)
             else:
                 latent_input = latent_view
+
+            print(f'pipeline.unet: {pipeline.unet.device}')
+            print(f'latent_input: {latent_input.device}')
             noise_pred = get_noise_pred_single(latent_input, t, cond_embeddings, pipeline.unet, t_start,control_tmp)
             latent_view_denoised = next_step(noise_pred, t, latent_view, ddim_scheduler)
             value[:,:,t_start:t_end] += latent_view_denoised
