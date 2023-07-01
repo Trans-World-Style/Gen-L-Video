@@ -320,6 +320,7 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         if control is not None and self.adapter is not None:
             #################
             control = control.to(self.device)
+            print(f'adapter: {self.adapter.dtype}')
             ##################
             features_adapter = self.adapter(control)
 
@@ -473,7 +474,6 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
                     lora_id = clip_ids
                 )
             else:
-                print(f'u_block: {upsample_block.device}')
                 sample = upsample_block(
                     hidden_states=sample, temb=emb, res_hidden_states_tuple=res_samples, upsample_size=upsample_size, lora_id = clip_ids
                 )

@@ -433,8 +433,6 @@ def main(
                 if control is not None:
                     control= rearrange(control, "b f c h w -> b c f h w")
 
-                print(f'unet11: {unet.device}')
-                print(f'vae11: {vae.device}')
                 model_pred = unet(noisy_latents, timesteps, clip_id, encoder_hidden_states,control=control).sample
                 ################
                 model_pred = model_pred.to(target.device)
