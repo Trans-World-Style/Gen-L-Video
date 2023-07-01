@@ -69,6 +69,11 @@ def check_gpu(message=None):
         print(f"  Total Memory: {gpu.memoryTotal}MB")
         print("")
 
+
+def to_cuda(num, *args):
+    for arg in args:
+        arg.to(device=f'cuda: {num}')
+
 def main(
     pretrained_model_path: str,
     output_dir: str,
@@ -295,14 +300,10 @@ def main(
         weight_dtype = torch.bfloat16
 
     # Move text_encode and vae to gpu and cast to weight_dtype
-    # if adapter is not None:
-    #     adapter.to(accelerator.device, dtype=weight_dtype)
-    # text_encoder.to(accelerator.device, dtype=weight_dtype)
-    # vae.to(accelerator.device, dtype=weight_dtype)
     if adapter is not None:
-        adapter.to(dtype=weight_dtype)
-    text_encoder.to(dtype=weight_dtype)
-    vae.to(dtype=weight_dtype)
+        adapter.to(accelerator.device, dtype=weight_dtype)
+    text_encoder.to(accelerator.device, dtype=weight_dtype)
+    vae.to(accelerator.device, dtype=weight_dtype)
 
     # We need to recalculate our total training steps as the size of the training dataloader may have changed.
     num_update_steps_per_epoch = math.ceil(len(train_dataloader) / gradient_accumulation_steps)
@@ -366,14 +367,13 @@ def main(
                 pixel_values = batch["pixel_values"].to(weight_dtype)
                 video_length = pixel_values.shape[1]
                 pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
-                check_gpu('before vae encode')
+                to_cuda(1, [vae, pixel_values])
                 latents = vae.encode(pixel_values).latent_dist.sample()
+                to_cuda(0, [vae, pixel_values])
                 latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
                 latents = latents * 0.18215
 
-                print(f'latents: {latents.device}')
-                
-                clip_id = batch["clip_id"].to(device=latents.device)
+                clip_id = batch["clip_id"]
 
                 # Sample noise that we'll add to the latents
                 noise = torch.randn_like(latents)
@@ -391,12 +391,7 @@ def main(
                 mask = torch.from_numpy(np.random.choice([1.0,0.0],size=bsz,p=[cond_prob, 1-cond_prob])).to(latents.device,weight_dtype)
                 mask = mask.unsqueeze(1).unsqueeze(2)
 
-                print(f'mask: {mask.device}')
-                print(f'batch(prompt_ids): {batch["prompt_ids"].device}')
-                print(f'batch(null_prompt_ids): {batch["null_prompt_ids"].device}')
-
-                encoder_hidden_states = text_encoder(batch["prompt_ids"].to(device=latents.device))[0] * mask + \
-                                        text_encoder(batch["null_prompt_ids"].to(device=latents.device))[0] * (1 - mask)
+                encoder_hidden_states = text_encoder(batch["prompt_ids"])[0] * mask + text_encoder(batch["null_prompt_ids"])[0] * (1-mask)
 
                 # Get the target for loss depending on the prediction type
                 if noise_scheduler.prediction_type == "epsilon":
@@ -410,7 +405,7 @@ def main(
                         continue
                     mask = torch.from_numpy(np.random.choice([1,0],size=bsz,p=[prob, 1-prob])).to(latents.device).long()
                     break
-                check_gpu('before clip id')
+
                 if sum(mask == 0) == 0:
                     clip_id = None
                 else:
@@ -420,18 +415,6 @@ def main(
                 if control is not None:
                     control= rearrange(control, "b f c h w -> b c f h w")
 
-                # print(f'unet: {unet.device}')
-                # print(f'noisy_latents: {noisy_latents.device}')
-                # print(f'timesteps: {timesteps.device}')
-                # print(f'clip_id: {clip_id.device}')
-                # print(f'encoder_hidden_states: {encoder_hidden_states.device}')
-                # print(f'control: {control.device}')
-                # check_gpu('before to device')
-                noisy_latents = noisy_latents.to(unet.device)
-                timesteps = timesteps.to(unet.device)
-                clip_id = clip_id.to(unet.device)
-                encoder_hidden_states = encoder_hidden_states.to(unet.device)
-                check_gpu('before unet pred')
                 model_pred = unet(noisy_latents, timesteps, clip_id, encoder_hidden_states,control=control).sample
                 loss = F.mse_loss(model_pred.float(), target.float(), reduction="mean")
                 # Gather the losses across all processes for logging (if we use distributed training).
