@@ -444,7 +444,7 @@ def main(
                 timesteps = timesteps.to(unet.device)
                 clip_id = clip_id.to(unet.device)
                 encoder_hidden_states = encoder_hidden_states.to(unet.device)
-                control = control.to(unet.device)
+                control = control.to(unet.device, detype=weight_dtype)
                 ########################################
                 model_pred = unet(noisy_latents, timesteps, clip_id, encoder_hidden_states,control=control).sample
                 loss = F.mse_loss(model_pred.float(), target.float(), reduction="mean")
