@@ -19,7 +19,7 @@ import transformers
 from accelerate import Accelerator
 from accelerate.logging import get_logger
 from accelerate.utils import set_seed
-from diffusers import AutoencoderKL, DDPMScheduler, DDIMScheduler
+from diffusers import AutoencoderKL, DDPMScheduler, DDIMScheduler, UNet2DConditionModel
 from diffusers.optimization import get_scheduler
 from diffusers.utils import check_min_version
 from diffusers.utils.import_utils import is_xformers_available
@@ -175,7 +175,7 @@ def main(
     print('%% text_encoder loaded %%')
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     print('%% vae loaded %%')
-    unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
+    unet = UNet2DConditionModel.from_pretrained(pretrained_model_path, subfolder="unet", device_map=device_map)
     print('%% unet loaded %%')
 
     # unet.to(accelerator.device, dtype=torch.float16)
