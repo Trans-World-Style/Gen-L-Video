@@ -71,7 +71,8 @@ def check_gpu(message=None):
 
 
 def to_cuda(num, *args):
-    for arg in args:
+    for i, arg in enumerate(args):
+        print(f"{i}'th arg: ")
         arg.to(device=f'cuda: {num}')
 
 def main(
@@ -370,6 +371,7 @@ def main(
                 to_cuda(1, [vae, pixel_values])
                 latents = vae.encode(pixel_values).latent_dist.sample()
                 to_cuda(0, [vae, pixel_values])
+                check_gpu('encode')
                 latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
                 latents = latents * 0.18215
 
