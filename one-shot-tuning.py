@@ -382,6 +382,8 @@ def main(
                 pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
                 ################
                 pixel_values = pixel_values.to(vae.device)
+                for bk, bv in batch.items():
+                    print(f'{bk}: {bv.device}')
                 check_gpu()
                 ###############
                 print(f'vae: {vae.device}')
