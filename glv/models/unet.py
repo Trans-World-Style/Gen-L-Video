@@ -281,9 +281,9 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
     def _set_gradient_checkpointing(self, module, value=False):
         if isinstance(module, (CrossAttnDownBlock3D, DownBlock3D, CrossAttnUpBlock3D, UpBlock3D)):
             module.gradient_checkpointing = value
-    
-        
-    
+
+
+
     def forward(
         self,
         sample: torch.FloatTensor,
@@ -313,11 +313,15 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         # The overall upsampling factor is equal to 2 ** (# num of upsampling layears).
         # However, the upsampling interpolation output size can be forced to fit any upsampling size
         # on the fly if necessary.
-        
+        sample = sample.to(self.device)
+        encoder_hidden_states = encoder_hidden_states.to(self.device)
+
         if control is not None and self.adapter is not None:
+            #################
             control = control.to(self.device)
+            ##################
             features_adapter = self.adapter(control)
-             
+
         if control is not None and self.controlnet is not None:
             down_block_additional_residuals , mid_block_additional_residual = self.controlnet(
                 sample,
@@ -343,6 +347,9 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
 
         # prepare attention_mask
         if attention_mask is not None:
+            ###########
+            attention_mask = attention_mask.to(self.device)
+            ###########
             attention_mask = (1 - attention_mask.to(sample.dtype)) * -10000.0
             attention_mask = attention_mask.unsqueeze(1)
 
@@ -365,7 +372,7 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
 
         # broadcast to batch dimension in a way that's compatible with ONNX/Core ML
         timesteps = timesteps.expand(sample.shape[0])
-        
+
         if clip_id is not None:
             clip_ids = clip_id
             if not torch.is_tensor(clip_ids):
@@ -381,8 +388,8 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
 
 
             # broadcast to batch dimension in a way that's compatible with ONNX/Core ML
-            clip_ids = clip_ids.expand(sample.shape[0]) 
-                        
+            clip_ids = clip_ids.expand(sample.shape[0])
+
             t_emb = self.time_proj(timesteps)
 
             i_emb = self.time_proj(clip_ids)
@@ -391,9 +398,6 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
             # there might be better ways to encapsulate this.
             t_emb = t_emb.to(dtype=self.dtype)
             i_emb = i_emb.to(dtype=self.dtype)
-            ###################
-            t_emb = t_emb.to(self.device)
-            ###################
             emb = self.time_embedding(t_emb)    # + 0.3 * self.id_embedding(i_emb) * (clip_ids >= 0).unsqueeze(1) add or not
         else:
             t_emb = self.time_proj(timesteps)
@@ -410,9 +414,6 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
 
             class_emb = self.class_embedding(class_labels).to(dtype=self.dtype)
             emb = emb + class_emb
-        #######################
-        sample = sample.to(self.device)
-        #######################
         # pre-process
         sample = self.conv_in(sample)
 
@@ -420,12 +421,6 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         down_block_res_samples = (sample,)
         for idx, downsample_block in enumerate(self.down_blocks):
             if hasattr(downsample_block, "has_cross_attention") and downsample_block.has_cross_attention:
-                #################
-                sample = sample.to(self.device)
-                emb = emb.to(self.device)
-                encoder_hidden_states = encoder_hidden_states.to(self.device)
-                # attention_mask = attention_mask.to(self.device)
-                #################
                 sample, res_samples = downsample_block(
                     hidden_states=sample,
                     temb=emb,
@@ -437,7 +432,7 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
             else:
                 sample, res_samples = downsample_block(hidden_states=sample, temb=emb, lora_id = clip_ids, feature_adapter =  features_adapter[idx] if (self.adapter is not None and control is not None) else None)
             down_block_res_samples += res_samples
-            
+
         if down_block_additional_residuals is not None:
             new_down_block_res_samples = ()
 
@@ -512,7 +507,7 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
             "CrossAttnDownBlock3D",
             "DownBlock3D"
         ]
-        config["mid_block_type"] = "UNetMidBlock3DCrossAttn"	
+        config["mid_block_type"] = "UNetMidBlock3DCrossAttn"
         config["up_block_types"] = [
             "UpBlock3D",
             "CrossAttnUpBlock3D",
@@ -571,7 +566,7 @@ class Adapter(nn.Module):
 
         features = [ rearrange(fn, '(b t) c h w -> b c t h w', b=b, t=t) for fn in features]
         return features
-    
+
 class ResnetBlock(nn.Module):
     def __init__(self, in_c, out_c, down, ksize=3, sk=False, use_conv=True):
         super().__init__()
@@ -633,7 +628,7 @@ class Downsample(nn.Module):
     def forward(self, x):
         assert x.shape[1] == self.channels
         return self.op(x)
-    
+
 def conv_nd(dims, *args, **kwargs):
     """
     Create a 1D, 2D, or 3D convolution module.
