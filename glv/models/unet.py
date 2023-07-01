@@ -91,7 +91,7 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         self.conv_in = InflatedConv3d(in_channels, block_out_channels[0], kernel_size=3, padding=(1, 1))
 
         # time
-        self.time_proj = Timesteps(block_out_channels[0], flip_sin_to_cos, freq_shift)
+        self.time_proj = Timesteps(block_out_channels[0], flip_sin_to_cos, freq_shift).to(self.device)
         timestep_input_dim = block_out_channels[0]
 
         self.time_embedding = TimestepEmbedding(timestep_input_dim, time_embed_dim)
