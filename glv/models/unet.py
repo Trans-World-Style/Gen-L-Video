@@ -409,7 +409,9 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
 
             class_emb = self.class_embedding(class_labels).to(dtype=self.dtype)
             emb = emb + class_emb
-
+        #######################
+        sample = sample.to(self.device)
+        #######################
         # pre-process
         sample = self.conv_in(sample)
 
