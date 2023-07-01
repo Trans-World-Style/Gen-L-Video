@@ -368,6 +368,9 @@ def main(
         unet.train()
         train_loss = 0.0
         for step, batch in enumerate(train_dataloader):
+            for bk, bv in batch.item():
+                print(f'{bk}: {bv.device}')
+            return
             # Skip steps until we reach the resumed step
             if resume_from_checkpoint and epoch == first_epoch and step < resume_step:
                 if step % gradient_accumulation_steps == 0:
