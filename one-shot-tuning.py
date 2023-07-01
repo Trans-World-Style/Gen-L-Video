@@ -384,7 +384,7 @@ def main(
                 pixel_values = batch["pixel_values"].to(weight_dtype)
                 video_length = pixel_values.shape[1]
                 pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
-                vae, pixel_values = to_cuda(vae.device, [vae, pixel_values])
+                pixel_values = to_cuda(vae.device, [pixel_values])
                 latents = vae.encode(pixel_values).latent_dist.sample()
                 # vae, pixel_values = to_cuda(0, [vae, pixel_values])
                 check_gpu('encode')
