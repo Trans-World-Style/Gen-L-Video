@@ -531,14 +531,13 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         with accelerate.init_empty_weights():
             model = cls.from_config(config)
         model_file = os.path.join(pretrained_model_path, WEIGHTS_NAME)
-        state_dict = torch.load(model_file, map_location="meta")
+        state_dict = torch.load(model_file, map_location="cpu")
         for k, v in model.state_dict().items():
             if '_temp.' in k:
                 state_dict.update({k: v})
             if 'id_embedding' in k:
                 state_dict.update({k: v})
-        model.load_state_dict(state_dict)
-        print(f'model: {model.device}')
+        model.load_state_dict(state_dict).to('cpu')
         accelerate.load_checkpoint_and_dispatch(model, model_file, device_map)
         # model.register_to_config(_name_or_path=pretrained_model_path)
         model.eval()
