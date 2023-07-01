@@ -163,8 +163,8 @@ def main(
             logging.StreamHandler(sys.stdout),
         ],
     )
-    device_map = 'balanced_low_0'
-    # device_map = 'sequential'
+    # device_map = 'balanced_low_0'
+    device_map = 'sequential'
     # Load scheduler, tokenizer and models.
     # noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map=device_map)
     # print('%% scheduler loaded %%')
