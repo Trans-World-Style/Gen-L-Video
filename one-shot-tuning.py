@@ -19,14 +19,14 @@ import transformers
 from accelerate import Accelerator
 from accelerate.logging import get_logger
 from accelerate.utils import set_seed
-from diffusers import AutoencoderKL, DDPMScheduler, DDIMScheduler, UNet2DConditionModel, UNet3DConditionModel
+from diffusers import AutoencoderKL, DDPMScheduler, DDIMScheduler#, UNet2DConditionModel, UNet3DConditionModel
 from diffusers.optimization import get_scheduler
 from diffusers.utils import check_min_version
 from diffusers.utils.import_utils import is_xformers_available
 from tqdm.auto import tqdm
 from transformers import CLIPTextModel, CLIPTokenizer
 import pandas as pd
-from glv.models.unet import Adapter#, UNet3DConditionModel
+from glv.models.unet import Adapter, UNet3DConditionModel
 from glv.data.dataset import GLVDataset
 from glv.pipelines.pipeline_one_shot_tuning import OneShotTuningPipeline
 from glv.util import ddim_inversion_long, save_videos_grid, ddim_inversion
@@ -175,8 +175,8 @@ def main(
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     print('%% vae loaded %%')
     # unet = UNet2DConditionModel.from_pretrained(pretrained_model_path, subfolder="unet", device_map=device_map)
-    unet = UNet3DConditionModel.from_pretrained(pretrained_model_path, subfolder="unet", device_map=device_map)
-    # unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
+    # unet = UNet3DConditionModel.from_pretrained(pretrained_model_path, subfolder="unet", device_map=device_map)
+    unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
     print('%% unet loaded %%')
     check_gpu()
 
