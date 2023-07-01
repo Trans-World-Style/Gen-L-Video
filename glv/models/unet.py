@@ -396,10 +396,10 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
             # timesteps does not contain any weights and will always return f32 tensors
             # but time_embedding might actually be running in fp16. so we need to cast here.
             # there might be better ways to encapsulate this.
-            print(f't_emb: {t_emb.device}')
-            print(f'i_emb: {i_emb.device}')
             t_emb = t_emb.to(self.device, dtype=self.dtype)
             i_emb = i_emb.to(self.device, dtype=self.dtype)
+            print(f't_emb: {t_emb.device}')
+            print(f'i_emb: {i_emb.device}')
             emb = self.time_embedding(t_emb)    # + 0.3 * self.id_embedding(i_emb) * (clip_ids >= 0).unsqueeze(1) add or not
         else:
             t_emb = self.time_proj(timesteps)
