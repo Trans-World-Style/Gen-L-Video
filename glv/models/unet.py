@@ -398,12 +398,10 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
             # there might be better ways to encapsulate this.
             t_emb = t_emb.to(self.device, dtype=self.dtype)
             i_emb = i_emb.to(self.device, dtype=self.dtype)
-            print(f't_emb: {t_emb.device}')
-            print(f'i_emb: {i_emb.device}')
             emb = self.time_embedding(t_emb)    # + 0.3 * self.id_embedding(i_emb) * (clip_ids >= 0).unsqueeze(1) add or not
         else:
             t_emb = self.time_proj(timesteps)
-            t_emb = t_emb.to(dtype=self.dtype)
+            t_emb = t_emb.to(self.device, dtype=self.dtype)
             emb = self.time_embedding(t_emb)
             clip_ids = clip_id
 
@@ -475,6 +473,7 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
                     lora_id = clip_ids
                 )
             else:
+                print(f'u_block: {upsample_block.device}')
                 sample = upsample_block(
                     hidden_states=sample, temb=emb, res_hidden_states_tuple=res_samples, upsample_size=upsample_size, lora_id = clip_ids
                 )
