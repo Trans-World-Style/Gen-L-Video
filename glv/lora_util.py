@@ -63,9 +63,9 @@ class LoraInjectedLinear(nn.Module):
             if lora_id < 0:
                 return self.linear(input)
 
-            print(f'lin: {self.linear(input).shape}')
-            print(f'tqtqtq: {lora_id}  {type(lora_id)}')
-            print(f'scale: {self.scale}')
+            ########################### 밑에 강제로 torch.float16해서 오류나는듯
+            lora_id = lora_id.to(torch.int)
+            ###########################
             return (
                 self.linear(input)
                 + self.dropout(self.lora_up[lora_id](self.selector(self.lora_down[lora_id](input))))
