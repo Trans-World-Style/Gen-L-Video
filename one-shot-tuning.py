@@ -533,7 +533,6 @@ def main(
                                 # print(latents.shape)
                             ################
                             full_control_video = full_control_video.to(latents.device)
-                            ddim_inv_scheduler.to(latents.device)
                             # print(f'val: {validation_pipeline.device}')
                             # print(f'full_control_video: {full_control_video.device}')
                             # print(f'latents: {latents.device}')
