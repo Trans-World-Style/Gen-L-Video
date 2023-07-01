@@ -368,7 +368,7 @@ def main(
         unet.train()
         train_loss = 0.0
         for step, batch in enumerate(train_dataloader):
-            for bk, bv in batch.item():
+            for bk, bv in batch.items():
                 print(f'{bk}: {bv.device}')
             return
             # Skip steps until we reach the resumed step
