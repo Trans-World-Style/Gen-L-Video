@@ -64,6 +64,9 @@ class LoraInjectedLinear(nn.Module):
                 return self.linear(input)
 
             print(f'lin: {self.linear(input)}')
+            print(f'tqtqtq: {self.lora_down[lora_id](input)}')
+            print(f'tqtqtq: {self.selector(self.lora_down[lora_id](input))}')
+            print(f'tqtqtq: {self.lora_up[lora_id](self.selector(self.lora_down[lora_id](input)))}')
             print(f'tqtqtq: {self.dropout(self.lora_up[lora_id](self.selector(self.lora_down[lora_id](input))))}')
             print(f'scale: {self.scale}')
             return (
