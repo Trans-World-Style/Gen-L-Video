@@ -384,6 +384,7 @@ def main(
                 pixel_values = pixel_values.to(vae.device)
                 check_gpu()
                 ###############
+                print(f'vae: {vae.device}')
                 latents = vae.encode(pixel_values).latent_dist.sample()
                 check_gpu('encode')
                 latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
@@ -406,8 +407,8 @@ def main(
                 # Get the text embedding for conditioning
                 mask = torch.from_numpy(np.random.choice([1.0,0.0],size=bsz,p=[cond_prob, 1-cond_prob])).to(latents.device,weight_dtype)
                 mask = mask.unsqueeze(1).unsqueeze(2)
-                print(f'latents: {latents.device}')
-                print(f'mask: {mask.device}')
+                mask = mask.to(pixel_values.device)
+                latents = latents.to(pixel_values.device)
                 encoder_hidden_states = text_encoder(batch["prompt_ids"])[0] * mask + text_encoder(batch["null_prompt_ids"])[0] * (1-mask)
 
                 # Get the target for loss depending on the prediction type
