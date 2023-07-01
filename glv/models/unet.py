@@ -419,6 +419,12 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         down_block_res_samples = (sample,)
         for idx, downsample_block in enumerate(self.down_blocks):
             if hasattr(downsample_block, "has_cross_attention") and downsample_block.has_cross_attention:
+                #################
+                sample = sample.to(self.device)
+                emb = emb.to(self.device)
+                encoder_hidden_states = encoder_hidden_states.to(self.device)
+                attention_mask = attention_mask.to(self.device)
+                #################
                 sample, res_samples = downsample_block(
                     hidden_states=sample,
                     temb=emb,
