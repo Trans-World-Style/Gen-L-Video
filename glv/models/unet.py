@@ -96,11 +96,6 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
 
         self.time_embedding = TimestepEmbedding(timestep_input_dim, time_embed_dim).to(self.device)
         self.id_embedding = TimestepEmbedding(timestep_input_dim, time_embed_dim).to(self.device)
-        #################
-        # self.time_proj = self.time_proj.to(self.device)
-        # self.time_embedding = self.time_embedding.to(self.device)
-        # self.id_embedding = self.id_embedding.to(self.device)
-        #################
 
         # class embedding
         if class_embed_type is None and num_class_embeds is not None:
@@ -403,8 +398,8 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
             # there might be better ways to encapsulate this.
             print(f't_emb: {t_emb.device}')
             print(f'i_emb: {i_emb.device}')
-            t_emb = t_emb.to(dtype=self.dtype)
-            i_emb = i_emb.to(dtype=self.dtype)
+            t_emb = t_emb.to(self.device, dtype=self.dtype)
+            i_emb = i_emb.to(self.device, dtype=self.dtype)
             emb = self.time_embedding(t_emb)    # + 0.3 * self.id_embedding(i_emb) * (clip_ids >= 0).unsqueeze(1) add or not
         else:
             t_emb = self.time_proj(timesteps)
