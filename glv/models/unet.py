@@ -97,9 +97,9 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         self.time_embedding = TimestepEmbedding(timestep_input_dim, time_embed_dim)
         self.id_embedding = TimestepEmbedding(timestep_input_dim, time_embed_dim)
         #################
-        self.time_proj.to(self.device)
-        self.time_embedding.to(self.device)
-        self.id_embedding.to(self.device)
+        self.time_proj = self.time_proj.to(self.device)
+        self.time_embedding = self.time_embedding.to(self.device)
+        self.id_embedding = self.id_embedding.to(self.device)
         #################
 
         # class embedding
@@ -318,9 +318,10 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         # The overall upsampling factor is equal to 2 ** (# num of upsampling layears).
         # However, the upsampling interpolation output size can be forced to fit any upsampling size
         # on the fly if necessary.
+        ################
         sample = sample.to(self.device)
         encoder_hidden_states = encoder_hidden_states.to(self.device)
-
+        ################
         if control is not None and self.adapter is not None:
             #################
             control = control.to(self.device)
@@ -396,7 +397,6 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
             clip_ids = clip_ids.expand(sample.shape[0])
 
             t_emb = self.time_proj(timesteps)
-
             i_emb = self.time_proj(clip_ids)
             # timesteps does not contain any weights and will always return f32 tensors
             # but time_embedding might actually be running in fp16. so we need to cast here.
