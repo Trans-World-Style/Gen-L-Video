@@ -142,8 +142,9 @@ def ddim_loop_long(pipeline, ddim_scheduler, latent, num_inv_steps, prompt, wind
             else:
                 latent_input = latent_view
 
-            print(f'pipeline.unet: {pipeline.unet.device}')
-            print(f'latent_input: {latent_input.device}')
+            ##########################
+            latent_input = latent_input.to(pipeline.unet.device)
+            ##########################
             noise_pred = get_noise_pred_single(latent_input, t, cond_embeddings, pipeline.unet, t_start,control_tmp)
             latent_view_denoised = next_step(noise_pred, t, latent_view, ddim_scheduler)
             value[:,:,t_start:t_end] += latent_view_denoised
