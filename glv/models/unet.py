@@ -563,8 +563,8 @@ class Adapter(nn.Module):
         self.conv_in = nn.Conv2d(cin,channels[0], 3, 1, 1)
 
     def forward(self, x):
-        print(f'xxxxxxxxxxxxxx: {x.device}')
-        x = x.to(torch.float16)
+        # print(f'xxxxxxxxxxxxxx: {x.device}')
+        # x = x.to(torch.float16)
         b, c, t, h, w = x.shape
         x = rearrange(x, 'b c t h w -> (b t) c h w')
         # unshuffle
