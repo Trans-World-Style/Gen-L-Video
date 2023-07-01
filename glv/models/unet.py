@@ -539,12 +539,12 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         #         raise RuntimeError(f"{model_file} does not exist")
         # else:
         state_dict = torch.load(model_file, map_location="cpu")
+        model.load_state_dict(state_dict)
         for k, v in model.state_dict().items():
             if '_temp.' in k:
                 state_dict.update({k: v})
             if 'id_embedding' in k:
                 state_dict.update({k: v})
-        model.load_state_dict(state_dict)
         accelerate.load_checkpoint_and_dispatch(model, model_file, device_map)
         # model.register_to_config(_name_or_path=pretrained_model_path)
         model.eval()
