@@ -178,7 +178,6 @@ def main(
     print('%% unet loaded %%')
 
     unet.to(accelerator.device, dtype=torch.float16)
-    noise_scheduler.to(accelerator.device, dtype=torch.float16)
     tokenizer.to(accelerator.device, dtype=torch.float16)
     text_encoder.to(accelerator.device, dtype=torch.float16)
     vae.to(accelerator.device, dtype=torch.float16)
