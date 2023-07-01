@@ -71,16 +71,16 @@ def check_gpu(message=None):
 
 
 def to_cuda(num, args):
-    for i, arg in enumerate(args):
+    for i, _ in enumerate(args):
         try:
             print(f"{i}'th arg: ", end='')
-            arg = arg.to(device=f'cuda:{num}')
+            args[i] = args[i].to(device=f'cuda:{num}')
             print('complete')
         except Exception as e:
             print('')
-            print(f'errer: {type(arg)}')
+            print(f'errer: {type(args[i])}')
             print(e)
-
+    return args
 def main(
     pretrained_model_path: str,
     output_dir: str,
@@ -374,9 +374,9 @@ def main(
                 pixel_values = batch["pixel_values"].to(weight_dtype)
                 video_length = pixel_values.shape[1]
                 pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
-                to_cuda(1, [vae, pixel_values])
+                vae, pixel_values = to_cuda(1, [vae, pixel_values])
                 latents = vae.encode(pixel_values).latent_dist.sample()
-                to_cuda(0, [vae, pixel_values])
+                vae, pixel_values = to_cuda(0, [vae, pixel_values])
                 check_gpu('encode')
                 latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
                 latents = latents * 0.18215
