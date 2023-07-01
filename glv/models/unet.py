@@ -91,11 +91,11 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         self.conv_in = InflatedConv3d(in_channels, block_out_channels[0], kernel_size=3, padding=(1, 1))
 
         # time
-        self.time_proj = Timesteps(block_out_channels[0], flip_sin_to_cos, freq_shift).to(self.device)
+        self.time_proj = Timesteps(block_out_channels[0], flip_sin_to_cos, freq_shift).to(self.device) ###########
         timestep_input_dim = block_out_channels[0]
 
-        self.time_embedding = TimestepEmbedding(timestep_input_dim, time_embed_dim).to(self.device)
-        self.id_embedding = TimestepEmbedding(timestep_input_dim, time_embed_dim).to(self.device)
+        self.time_embedding = TimestepEmbedding(timestep_input_dim, time_embed_dim).to(self.device) ##############
+        self.id_embedding = TimestepEmbedding(timestep_input_dim, time_embed_dim).to(self.device) #################
 
         # class embedding
         if class_embed_type is None and num_class_embeds is not None:
@@ -537,24 +537,6 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
             if 'id_embedding' in k:
                 state_dict.update({k: v})
         model.load_state_dict(state_dict)
-        #######################################################
-        # from diffusers.utils import WEIGHTS_NAME,SAFETENSORS_WEIGHTS_NAME
-        # # with accelerate.init_empty_weights():
-        # model = cls.from_config(config)
-        # model_file = os.path.join(pretrained_model_path, WEIGHTS_NAME)
-        # state_dict = torch.load(model_file, map_location="cpu")
-        # for k, v in model.state_dict().items():
-        #     if '_temp.' in k:
-        #         state_dict.update({k: v})
-        #     if 'id_embedding' in k:
-        #         state_dict.update({k: v})
-        # model.load_state_dict(state_dict)
-        # # model.to('cpu')
-        # # print(f'model: {model.device}')
-        # accelerate.load_checkpoint_and_dispatch(model, model_file, device_map)
-        # # model.register_to_config(_name_or_path=pretrained_model_path)
-        # model.eval()
-        ###########################################################
         return model
 
 class Adapter(nn.Module):
@@ -574,8 +556,6 @@ class Adapter(nn.Module):
         self.conv_in = nn.Conv2d(cin,channels[0], 3, 1, 1)
 
     def forward(self, x):
-        # print(f'xxxxxxxxxxxxxx: {x.device}')
-        # x = x.to(torch.float16)
         b, c, t, h, w = x.shape
         x = rearrange(x, 'b c t h w -> (b t) c h w')
         # unshuffle
