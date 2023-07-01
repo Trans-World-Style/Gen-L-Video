@@ -174,7 +174,7 @@ def main(
     # print('%% text_encoder loaded %%')
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     print('%% vae loaded %%')
-    vae.to(accelerator.device, dtype='f16')
+    vae.to(accelerator.device, dtype='fp16')
     check_gpu('hihi')
     print(vae.device)
     return
