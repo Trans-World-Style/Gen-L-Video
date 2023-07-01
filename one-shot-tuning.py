@@ -447,6 +447,9 @@ def main(
                 control = control.to(unet.device, dtype=weight_dtype)
                 ########################################
                 model_pred = unet(noisy_latents, timesteps, clip_id, encoder_hidden_states,control=control).sample
+                ################
+                model_pred = model_pred.to(target.device)
+                ################
                 loss = F.mse_loss(model_pred.float(), target.float(), reduction="mean")
                 # Gather the losses across all processes for logging (if we use distributed training).
                 avg_loss = accelerator.gather(loss.repeat(train_batch_size)).mean()
