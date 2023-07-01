@@ -176,7 +176,7 @@ def main(
     print('%% vae loaded %%')
     # unet = UNet2DConditionModel.from_pretrained(pretrained_model_path, subfolder="unet", device_map=device_map)
     # unet = UNet3DConditionModel.from_pretrained(pretrained_model_path, subfolder="unet", device_map=device_map)
-    unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
+    unet = UNet3DConditionModel.from_pretrained(pretrained_model_path, subfolder="unet", device_map=device_map)
     print('%% unet loaded %%')
     check_gpu()
 
