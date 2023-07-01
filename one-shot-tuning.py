@@ -77,6 +77,7 @@ def to_cuda(num, args):
             arg = arg.to(device=f'cuda: {num}')
         except Exception as e:
             print(f'errer: {type(arg)}')
+            print(e)
 
 def main(
     pretrained_model_path: str,
