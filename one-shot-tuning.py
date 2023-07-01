@@ -163,8 +163,8 @@ def main(
             logging.StreamHandler(sys.stdout),
         ],
     )
-    # device_map = 'balanced_low_0'
-    device_map = 'sequential'
+    device_map = 'balanced_low_0'
+    # device_map = 'sequential'
     check_gpu('hihi')
     # Load scheduler, tokenizer and models.
     noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map=device_map)
@@ -176,6 +176,7 @@ def main(
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     print('%% vae loaded %%')
     unet = UNet2DConditionModel.from_pretrained(pretrained_model_path, subfolder="unet", device_map=device_map)
+    # unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
     print('%% unet loaded %%')
 
     # unet.to(accelerator.device, dtype=torch.float16)
