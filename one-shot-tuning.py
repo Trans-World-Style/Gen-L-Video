@@ -432,18 +432,9 @@ def main(
                 control = batch.get("control_video")
                 if control is not None:
                     control= rearrange(control, "b f c h w -> b c f h w")
-                ##########################################
-                if noisy_latents is not None:
-                    noisy_latents = noisy_latents.to(unet.device)
-                if timesteps is not None:
-                    timesteps = timesteps.to(unet.device)
-                if clip_id is not None:
-                    clip_id = clip_id.to(unet.device)
-                if encoder_hidden_states is not None:
-                    encoder_hidden_states = encoder_hidden_states.to(unet.device)
-                if control is not None:
-                    control = control.to(unet.device, dtype=weight_dtype)
-                ########################################
+
+                print(f'unet11: {unet.device}')
+                print(f'vae11: {vae.device}')
                 model_pred = unet(noisy_latents, timesteps, clip_id, encoder_hidden_states,control=control).sample
                 ################
                 model_pred = model_pred.to(target.device)
