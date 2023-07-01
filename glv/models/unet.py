@@ -390,7 +390,9 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
             # there might be better ways to encapsulate this.
             t_emb = t_emb.to(dtype=self.dtype)
             i_emb = i_emb.to(dtype=self.dtype)
-
+            ###################
+            t_emb = t_emb.to(self.device)
+            ###################
             emb = self.time_embedding(t_emb)    # + 0.3 * self.id_embedding(i_emb) * (clip_ids >= 0).unsqueeze(1) add or not
         else:
             t_emb = self.time_proj(timesteps)
