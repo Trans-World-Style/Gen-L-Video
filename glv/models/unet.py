@@ -531,7 +531,7 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         with accelerate.init_empty_weights():
             model = cls.from_config(config)
         model_file = os.path.join(pretrained_model_path, WEIGHTS_NAME)
-        state_dict = torch.load(model_file, map_location="cpu")
+        state_dict = torch.load(model_file, map_location="meta")
         for k, v in model.state_dict().items():
             if '_temp.' in k:
                 state_dict.update({k: v})
