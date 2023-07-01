@@ -152,6 +152,9 @@ def ddim_loop_long(pipeline, ddim_scheduler, latent, num_inv_steps, prompt, wind
             latent_view = latent_view.to(noise_pred.device)
             #########################
             latent_view_denoised = next_step(noise_pred, t, latent_view, ddim_scheduler)
+            ##########################
+            latent_view_denoised = latent_view_denoised.to(value.device)
+            ##########################
             value[:,:,t_start:t_end] += latent_view_denoised
             count[:,:,t_start:t_end] += 1
         latent = torch.where(count>0,value/count,value)
