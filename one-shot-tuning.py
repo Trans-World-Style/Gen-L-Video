@@ -177,11 +177,12 @@ def main(
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
     print('%% unet loaded %%')
 
-    unet.to(accelerator.device, dtype=torch.float16)
-    text_encoder.to(accelerator.device, dtype=torch.float16)
-    vae.to(accelerator.device, dtype=torch.float16)
+    # unet.to(accelerator.device, dtype=torch.float16)
+    # text_encoder.to(accelerator.device, dtype=torch.float16)
+    # vae.to(accelerator.device, dtype=torch.float16)
     check_gpu('hihi')
     print(vae.device)
+    print(unet.device)
     return
 
 
