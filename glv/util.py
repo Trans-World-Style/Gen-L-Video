@@ -119,7 +119,6 @@ def ddim_inversion_long(pipeline, ddim_scheduler, video_latent, num_inv_steps, p
     print(f'pipeline: {pipeline.device}')
     print(f'video_latent: {video_latent.device}')
     print(f'control: {control.device}')
-    print(f'depth_map: {depth_map.device}')
     ddim_latents = ddim_loop_long(pipeline, ddim_scheduler, video_latent, num_inv_steps, prompt, window_size, stride,control,depth_map)
     return ddim_latents
 
