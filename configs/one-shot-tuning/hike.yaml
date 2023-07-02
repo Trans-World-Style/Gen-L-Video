@@ -16,10 +16,10 @@ validation_data:
   video_length: 16
   width: 512
   height: 512
-  num_inference_steps: 2
+  num_inference_steps: 50
   guidance_scale: 12.5
   use_inv_latent: True
-  num_inv_steps: 2
+  num_inv_steps: 50
   stride: 4
   prompts:
   - "masterpiece, 4k, best quality, 1girl is walking in the mountain, female child, agnes, black hair, brown eyes, high ponytail, sidelocks, overalls, shirt, shoes, smile."
@@ -29,9 +29,9 @@ validation_data:
 cond_prob: 0.9
 learning_rate: 3e-5
 train_batch_size: 1
-max_train_steps: 20
-checkpointing_steps: 20
-validation_steps: 10
+max_train_steps: 200
+checkpointing_steps: 200
+validation_steps: 40
 start_validatoin_steps: -1
 trainable_modules:
   - "attn_temp"
