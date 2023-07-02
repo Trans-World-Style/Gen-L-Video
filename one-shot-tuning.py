@@ -165,26 +165,26 @@ def main(
     device_map = 'balanced_low_0'
     # device_map = 'sequential'
     # Load scheduler, tokenizer and models.
-    # noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map=device_map)
-    # print('%% scheduler loaded %%')
-    # tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer", device_map=device_map)
-    # print('%% tokenizer loaded %%')
-    # text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
-    # print('%% text_encoder loaded %%')
-    # vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
-    # print('%% vae loaded %%')
-    # unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
-    # print('%% unet loaded %%')
-    noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
+    noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map=device_map)
     print('%% scheduler loaded %%')
-    tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
+    tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer", device_map=device_map)
     print('%% tokenizer loaded %%')
-    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
+    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
     print('%% text_encoder loaded %%')
-    vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae")
+    vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     print('%% vae loaded %%')
-    unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
+    unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
     print('%% unet loaded %%')
+    # noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
+    # print('%% scheduler loaded %%')
+    # tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
+    # print('%% tokenizer loaded %%')
+    # text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
+    # print('%% text_encoder loaded %%')
+    # vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae")
+    # print('%% vae loaded %%')
+    # unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
+    # print('%% unet loaded %%')
 
     if adapter_path is not None:
         adapter = Adapter(
@@ -391,7 +391,6 @@ def main(
                 pixel_values = batch["pixel_values"].to(weight_dtype)
                 video_length = pixel_values.shape[1]
                 pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
-                pixel_values = pixel_values.to(vae.device)
                 latents = vae.encode(pixel_values).latent_dist.sample()
                 latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
                 latents = latents * 0.18215
