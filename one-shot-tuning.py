@@ -436,8 +436,14 @@ def main(
                 control = batch.get("control_video")
                 if control is not None:
                     control= rearrange(control, "b f c h w -> b c f h w").to(weight_dtype)
-
-                model_pred = unet(noisy_latents, timesteps, clip_id, encoder_hidden_states,control=control).sample
+                ######################
+                def wrapper_fn(noisy_latents, timesteps, clip_id, encoder_hidden_states, control=control):
+                    y = unet(noisy_latents, timesteps, clip_id, encoder_hidden_states, control=control).sample
+                    return y
+                pred_fn = torch._dynamo.optimize(wrapper_fn)
+                model_pred = pred_fn(noisy_latents, timesteps, clip_id, encoder_hidden_states,control=control)
+                #####################################
+                # model_pred = unet(noisy_latents, timesteps, clip_id, encoder_hidden_states,control=control).sample
                 ################
                 model_pred = model_pred.to(target.device)
                 ################
