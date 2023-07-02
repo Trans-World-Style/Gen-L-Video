@@ -16,10 +16,10 @@ validation_data:
   video_length: 16
   width: 512
   height: 512
-  num_inference_steps: 5
+  num_inference_steps: 1
   guidance_scale: 12.5
   use_inv_latent: True
-  num_inv_steps: 5
+  num_inv_steps: 1
   stride: 4
   prompts:
   - "masterpiece, 4k, best quality, 1girl is walking in the mountain, female child, agnes, black hair, brown eyes, high ponytail, sidelocks, overalls, shirt, shoes, smile."

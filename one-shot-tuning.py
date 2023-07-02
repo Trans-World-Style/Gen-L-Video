@@ -570,6 +570,7 @@ adapter_paths={
     "canny":"weights/T2I-Adapter/models/t2iadapter_canny_sd14v1.pth"
 }
 if __name__ == "__main__":
+    torch.cuda.empty_cache()
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="./configs/one-shot-tuning/hike.yaml")
     parser.add_argument("--control",type=str,default=None)
