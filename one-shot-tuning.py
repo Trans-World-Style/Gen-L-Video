@@ -437,7 +437,7 @@ def main(
                 if control is not None:
                     control= rearrange(control, "b f c h w -> b c f h w").to(weight_dtype)
                 ######################
-                def wrapper_fn(noisy_latents, timesteps, clip_id, encoder_hidden_states, control):
+                def wrapper_fn(noisy_latents, timesteps, clip_id, encoder_hidden_states, control=control):
                     y = unet(noisy_latents, timesteps, clip_id, encoder_hidden_states, control=control).sample
                     return y
                 pred_fn = torch._dynamo.optimize(wrapper_fn)
