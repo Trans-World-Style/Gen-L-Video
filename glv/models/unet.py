@@ -319,7 +319,7 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         ################
         if control is not None and self.adapter is not None:
             #################
-            control = control.to(self.device, dtype=torch.float16)
+            control = control.to(self.device)
             ##################
             features_adapter = self.adapter(control)
 
