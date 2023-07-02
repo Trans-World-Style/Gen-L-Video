@@ -164,7 +164,6 @@ def main(
     )
     device_map = 'balanced_low_0'
     # device_map = 'sequential'
-    check_gpu('hihi')
     # Load scheduler, tokenizer and models.
     noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map=device_map)
     print('%% scheduler loaded %%')
@@ -178,7 +177,6 @@ def main(
     # unet = UNet3DConditionModel.from_pretrained(pretrained_model_path, subfolder="unet", device_map=device_map)
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
     print('%% unet loaded %%')
-    check_gpu()
 
     if adapter_path is not None:
         adapter = Adapter(
@@ -382,11 +380,7 @@ def main(
                 pixel_values = batch["pixel_values"].to(weight_dtype)
                 video_length = pixel_values.shape[1]
                 pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
-                ################
-                ###############
-                print(f'vae: {vae.device}')
                 latents = vae.encode(pixel_values).latent_dist.sample()
-                check_gpu('encode')
                 latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
                 latents = latents * 0.18215
 
@@ -402,7 +396,6 @@ def main(
                 # Add noise to the latents according to the noise magnitude at each timestep
                 # (this is the forward diffusion process)
                 noisy_latents = noise_scheduler.add_noise(latents, noise, timesteps)
-                check_gpu('before encoder hidden states')
 
                 # Get the text embedding for conditioning
                 mask = torch.from_numpy(np.random.choice([1.0,0.0],size=bsz,p=[cond_prob, 1-cond_prob])).to(latents.device,weight_dtype)
@@ -442,7 +435,6 @@ def main(
                 avg_loss = accelerator.gather(loss.repeat(train_batch_size)).mean()
                 train_loss += avg_loss.item() / gradient_accumulation_steps
                 # Backpropagate
-                check_gpu('before backward')
                 accelerator.backward(loss)
                 if accelerator.sync_gradients:
                     accelerator.clip_grad_norm_(unet.parameters(), max_grad_norm)
@@ -549,6 +541,7 @@ def main(
             if global_step >= max_train_steps:
                 break
 
+    check_gpu('end train')
     # Create the pipeline using the trained modules and save it.
     accelerator.wait_for_everyone()
     if accelerator.is_main_process:
