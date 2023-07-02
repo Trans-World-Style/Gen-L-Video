@@ -435,6 +435,13 @@ class OneShotTuningPipeline(DiffusionPipeline):
         control = None,
         **kwargs,
     ):
+
+        print(f'latents: {latents.device}')
+        if control is not None:
+            print(f'control: {control.device}')
+        else:
+            print(f'control is None')
+        print(f'self: {self._execution_device}')
         # Default height and width to unet
         height = height or self.unet.config.sample_size * self.vae_scale_factor
         width = width or self.unet.config.sample_size * self.vae_scale_factor
