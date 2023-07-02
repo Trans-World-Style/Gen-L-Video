@@ -513,10 +513,7 @@ def main(
                             latents = torch.cat(latents_lst,dim=2)
                                 # print(latents.shape)
                             ################
-                            full_control_video = full_control_video.to(latents.device)
-                            # print(f'val: {validation_pipeline.device}')
-                            # print(f'full_control_video: {full_control_video.device}')
-                            # print(f'latents: {latents.device}')
+                            # full_control_video = full_control_video.to(latents.device)
                             ################
                             ddim_inv_latent = ddim_inversion_long(
                             validation_pipeline, ddim_inv_scheduler, video_latent=latents,
