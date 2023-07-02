@@ -440,6 +440,19 @@ def main(
                 def wrapper_fn(x):
                     y = unet(x[0], x[1], x[2], x[3], x[4])
                     return y.sample
+
+                # 'wrapper_fn'이 호출 가능한지 확인
+                assert callable(wrapper_fn), "'wrapper_fn' is not callable"
+
+                # 'unet'이 호출 가능한지 확인
+                assert callable(unet), "'unet' is not callable"
+
+                # 함수 최적화
+                try:
+                    opt_wrapper_fn = torch._dynamo.optimize(wrapper_fn)
+                except AttributeError:
+                    print(
+                        "'torch._dynamo.optimize' does not seem to be a valid attribute or method. Check if you are using an experimental or outdated version of PyTorch.")
                 pred_fn = torch._dynamo.optimize(wrapper_fn)
                 model_pred = pred_fn([noisy_latents, timesteps, clip_id, encoder_hidden_states, control])
                 #####################################
