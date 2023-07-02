@@ -376,7 +376,8 @@ def main(
         unet.train()
         train_loss = 0.0
         for step, batch in enumerate(train_dataloader):
-            print(f'batch: {batch}')
+            for bk, bv in batch.items():
+                print(f'{bk}: {bv.dtype}')
             check_gpu('in step')
             # Skip steps until we reach the resumed step
             if resume_from_checkpoint and epoch == first_epoch and step < resume_step:
