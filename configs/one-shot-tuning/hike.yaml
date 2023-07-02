@@ -29,9 +29,9 @@ validation_data:
 cond_prob: 0.9
 learning_rate: 3e-5
 train_batch_size: 1
-max_train_steps: 8
-checkpointing_steps: 8
-validation_steps: 4
+max_train_steps: 200
+checkpointing_steps: 200
+validation_steps: 10
 start_validatoin_steps: -1
 trainable_modules:
   - "attn_temp"
