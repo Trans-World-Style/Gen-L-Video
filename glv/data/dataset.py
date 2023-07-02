@@ -71,6 +71,7 @@ class GLVDataset(Dataset):
         sample_index = self.sample_index[index:index+self.n_sample_frames]
         video = self.vr.get_batch(sample_index)
         video = rearrange(video, "f h w c -> f c h w")
+        print(f'vidio data type: {video.dtype}')
         if self.control_path is not None:
             control_video = self.control_vr.get_batch(sample_index)
             control_video = rearrange(control_video, "f h w c -> f c h w")
