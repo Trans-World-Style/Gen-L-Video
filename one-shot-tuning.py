@@ -368,6 +368,7 @@ def main(
         unet.train()
         train_loss = 0.0
         for step, batch in enumerate(train_dataloader):
+            check_gpu('in step')
             # Skip steps until we reach the resumed step
             if resume_from_checkpoint and epoch == first_epoch and step < resume_step:
                 if step % gradient_accumulation_steps == 0:
@@ -512,9 +513,6 @@ def main(
                                 latents_lst.append(latents)
                             latents = torch.cat(latents_lst,dim=2)
                                 # print(latents.shape)
-                            ################
-                            # full_control_video = full_control_video.to(latents.device)
-                            ################
                             ddim_inv_latent = ddim_inversion_long(
                             validation_pipeline, ddim_inv_scheduler, video_latent=latents,
                             num_inv_steps=validation_data.num_inv_steps, prompt="",window_size=clip_length,stride=validation_data.stride,control=full_control_video)[-1].to(weight_dtype)
