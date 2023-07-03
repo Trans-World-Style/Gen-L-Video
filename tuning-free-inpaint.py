@@ -84,7 +84,6 @@ def prompt2mask(original_image, caption,grounding_model=None,sam_predictor=None,
     if not caption.endswith("."):
         caption = caption + "."
     _, image_tensor = image_transform_grounding(original_image)
-    print(f'image_tensor: {image_tensor.device}')
     boxes, logits, phrases = predict(grounding_model,
                                      image_tensor, caption, box_threshold, text_threshold, device=device)
     H, W = original_image.size[1], original_image.size[0]
@@ -212,7 +211,7 @@ def main(
     text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
-    grounding_model = load_groundingdino_model(groundingdino_config_file, groundingdino_checkpoint,accelerator.device)
+    grounding_model = load_groundingdino_model(groundingdino_config_file, groundingdino_checkpoint,'cpu')
     model_type = "default"
     sam = sam_model_registry[model_type](checkpoint=sam_checkpoint) 
     if controlnet_path is not None:
