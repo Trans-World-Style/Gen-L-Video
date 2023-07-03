@@ -79,12 +79,19 @@ def main(
     # Load scheduler, tokenizer and models.
     device_map = 'balanced_low_0'
     noise_scheduler = DDIMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map=device_map)
+    print(f'noise_scheduler: {noise_scheduler.device}')
     tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer", device_map=device_map)
+    print(f'tokenizer: {tokenizer.device}')
     text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
+    print(f'text_encoder: {text_encoder.device}')
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
+    print(f'vae: {vae.device}')
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
+    print(f'unet: {unet.device}')
     depth_estimator = DPTForDepthEstimation.from_pretrained(pretrained_model_path, subfolder="depth_estimator")
+    print(f'depth_estimator: {depth_estimator.device}')
     feature_extractor = DPTImageProcessor.from_pretrained(pretrained_model_path, subfolder="feature_extractor", device_map=device_map)
+    print(f'feature_extractor: {feature_extractor.device}')
 
     # Freeze vae and text_encoder
     vae.requires_grad_(False)
