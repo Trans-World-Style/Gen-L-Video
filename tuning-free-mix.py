@@ -98,7 +98,7 @@ def main(
     # device_map = 'balanced'
     noise_scheduler = DDIMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
     tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
-    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
+    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
     depth_estimator = DPTForDepthEstimation.from_pretrained(pretrained_model_path, subfolder="depth_estimator")
@@ -156,7 +156,7 @@ def main(
     # depth_estimator.to(accelerator.device, dtype=weight_dtype)
 
     #######################################
-    text_encoder.to(dtype=weight_dtype)
+    text_encoder.to(accelerator.device, dtype=weight_dtype)
     vae.to(dtype=weight_dtype)
     unet.to(accelerator.device, dtype=weight_dtype)
     depth_estimator.to(accelerator.device, dtype=weight_dtype)
