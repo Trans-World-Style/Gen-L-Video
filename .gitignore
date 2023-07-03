@@ -2,3 +2,5 @@ weights
 .vscode 
 __pycache__/
 download.sh
+.DS_Store
+.idea/
