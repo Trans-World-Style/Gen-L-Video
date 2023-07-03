@@ -165,26 +165,26 @@ def main(
     device_map = 'balanced_low_0'
     # device_map = 'sequential'
     # Load scheduler, tokenizer and models.
-    # noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map=device_map)
-    # print('%% scheduler loaded %%')
-    # tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer", device_map=device_map)
-    # print('%% tokenizer loaded %%')
-    # text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
-    # print('%% text_encoder loaded %%')
-    # vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
-    # print('%% vae loaded %%')
-    # unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
-    # print('%% unet loaded %%')
-    noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
+    noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map=device_map)
     print('%% scheduler loaded %%')
-    tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
+    tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer", device_map=device_map)
     print('%% tokenizer loaded %%')
-    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
+    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
     print('%% text_encoder loaded %%')
-    vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae")
+    vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     print('%% vae loaded %%')
-    unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
+    unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet", device_map=device_map)
     print('%% unet loaded %%')
+    # noise_scheduler = DDPMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
+    # print('%% scheduler loaded %%')
+    # tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
+    # print('%% tokenizer loaded %%')
+    # text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
+    # print('%% text_encoder loaded %%')
+    # vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae")
+    # print('%% vae loaded %%')
+    # unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
+    # print('%% unet loaded %%')
 
     if adapter_path is not None:
         adapter = Adapter(
@@ -316,15 +316,15 @@ def main(
         weight_dtype = torch.bfloat16
 
     # Move text_encode and vae to gpu and cast to weight_dtype
-    # if adapter is not None:
-    #     adapter.to(accelerator.device, dtype=weight_dtype)
-    # text_encoder.to(accelerator.device, dtype=weight_dtype)
-    # vae.to(accelerator.device, dtype=weight_dtype)
-
     if adapter is not None:
-        adapter.to(dtype=weight_dtype)
-    text_encoder.to(dtype=weight_dtype)
-    vae.to(dtype=weight_dtype)
+        adapter.to(accelerator.device, dtype=weight_dtype)
+    text_encoder.to(accelerator.device, dtype=weight_dtype)
+    vae.to(accelerator.device, dtype=weight_dtype)
+
+    # if adapter is not None:
+    #     adapter.to(dtype=weight_dtype)
+    # text_encoder.to(dtype=weight_dtype)
+    # vae.to(dtype=weight_dtype)
 
     # We need to recalculate our total training steps as the size of the training dataloader may have changed.
     num_update_steps_per_epoch = math.ceil(len(train_dataloader) / gradient_accumulation_steps)
@@ -436,9 +436,6 @@ def main(
                     control= rearrange(control, "b f c h w -> b c f h w").to(weight_dtype)
 
                 model_pred = unet(noisy_latents, timesteps, clip_id, encoder_hidden_states,control=control).sample
-                ################
-                # model_pred = model_pred.to(target.device)
-                ################
                 loss = F.mse_loss(model_pred.float(), target.float(), reduction="mean")
                 # Gather the losses across all processes for logging (if we use distributed training).
                 avg_loss = accelerator.gather(loss.repeat(train_batch_size)).mean()
