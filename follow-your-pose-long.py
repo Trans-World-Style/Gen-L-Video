@@ -162,6 +162,9 @@ def main(
                 with torch.autocast("cuda"):
                     validation_multidata = copy.deepcopy(validation_data)
                     validation_multidata.video_length = ddim_inv_latent.shape[2]
+                    print(f'validation_pipeline: {validation_pipeline.device}')
+                    print(f'pixel_values: {pixel_values.device}')
+                    print(f'ddim_inv_latent: {ddim_inv_latent.device}')
                     sample = validation_pipeline.gen_long(prompt,control=pixel_values, generator=generator, latents=ddim_inv_latent,window_size=validation_data.video_length,
                                              **validation_multidata).videos
                 save_videos_grid(sample, f"{output_dir}/samples/sample/{prompt}.gif")
@@ -178,9 +181,9 @@ def main(
                         validation_multidata = copy.deepcopy(validation_data)
                         validation_multidata.video_length = ddim_inv_latent.shape[2]
                         prompt = list(prompt)
-                        print(f'validation_pipeline: {validation_pipeline.device}')
-                        print(f'pixel_values: {pixel_values.device}')
-                        print(f'ddim_inv_latent: {ddim_inv_latent.device}')
+                        # print(f'validation_pipeline: {validation_pipeline.device}')
+                        # print(f'pixel_values: {pixel_values.device}')
+                        # print(f'ddim_inv_latent: {ddim_inv_latent.device}')
                         sample = validation_pipeline.gen_long_mix(prompt,control=pixel_values, generator=generator, latents=ddim_inv_latent,window_size=validation_data.video_length,
                                                  **validation_multidata).videos
                     save_videos_grid(sample, f"{output_dir}/samples/sample-mix/{prompt[0]}.gif")
