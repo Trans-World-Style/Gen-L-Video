@@ -83,7 +83,7 @@ def main(
     text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
-    depth_estimator = DPTForDepthEstimation.from_pretrained(pretrained_model_path, subfolder="depth_estimator", device_map=device_map)
+    depth_estimator = DPTForDepthEstimation.from_pretrained(pretrained_model_path, subfolder="depth_estimator")
     feature_extractor = DPTImageProcessor.from_pretrained(pretrained_model_path, subfolder="feature_extractor", device_map=device_map)
 
     # Freeze vae and text_encoder
