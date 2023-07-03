@@ -152,8 +152,6 @@ def main(
             pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
             latents = [ ]
             for i in range(0,video_length,validation_data.video_length):
-                print(f'vae: {vae.device}')
-                print(f'pixel: {pixel_values[i:i+validation_data.video_length].device}')
                 latents.append( vae.encode(pixel_values[i:i+validation_data.video_length].to(vae.device)).latent_dist.sample())
             latents = torch.cat(latents,dim=0)
             latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
@@ -169,11 +167,11 @@ def main(
                 control = control[:,:,:video_length]
                 control = control.to(accelerator.device,weight_dtype)
             for idx, prompt in enumerate(validation_data.prompts):
-                with torch.autocast("cuda"):
-                    validation_multidata = copy.deepcopy(validation_data)
-                    validation_multidata.video_length = video_length
-                    sample = validation_pipeline.gen_long(prompt,latents, generator=generator,window_size=validation_data.video_length,control=control,
-                                             **validation_multidata).videos
+                # with torch.autocast("cuda"):
+                validation_multidata = copy.deepcopy(validation_data)
+                validation_multidata.video_length = video_length
+                sample = validation_pipeline.gen_long(prompt, latents.to(validation_pipeline.device), generator=generator,window_size=validation_data.video_length,control=control.to(validation_pipeline.device),
+                                         **validation_multidata).videos
                 save_videos_grid(sample, f"{output_dir}/samples/sample/{idx}-{prompt[:32]}.gif")
                 samples.append(sample)
             samples = torch.concat(samples)
