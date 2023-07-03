@@ -134,7 +134,7 @@ def main(
         weight_dtype = torch.bfloat16
 
     text_encoder.to(accelerator.device, dtype=weight_dtype)
-    vae.to(accelerator.device, dtype=weight_dtype)
+    vae.to(dtype=weight_dtype)
     unet.to(accelerator.device,dtype=weight_dtype)
     if controlnet is not None:
         controlnet.to(accelerator.device, dtype=weight_dtype)
