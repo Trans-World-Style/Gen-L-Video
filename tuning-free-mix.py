@@ -180,7 +180,7 @@ def main(
             latents = [ ]
             for i in range(0,video_length,validation_data.video_length):
                 check_gpu()
-                latents.append(vae.encode(pixel_values[i:i+validation_data.video_length]).latent_dist.sample())
+                latents.append(vae.encode(pixel_values[i:i+validation_data.video_length]).latent_dist.sample().to(unet.device))
             latents = torch.cat(latents,dim=0)
             latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
             latents = latents * 0.18215
