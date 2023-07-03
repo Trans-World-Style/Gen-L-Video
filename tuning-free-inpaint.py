@@ -37,13 +37,14 @@ from segment_anything.utils.amg import remove_small_regions
 from PIL import Image
 
 
-def load_groundingdino_model(model_config_path, model_checkpoint_path,device):
+def load_groundingdino_model(model_config_path, model_checkpoint_path, device):
     args = SLConfig.fromfile(model_config_path)
     args.device = device
     model = build_model(args)
     checkpoint = torch.load(model_checkpoint_path, map_location="cpu")
     load_res = model.load_state_dict(clean_state_dict(checkpoint["model"]), strict=False)
     _ = model.eval()
+    print(f'fdasoijfoajdsifjikj: {model.device}')
     return model
 
 def prompt2mask(original_image, caption,grounding_model=None,sam_predictor=None, device="cuda",box_threshold=0.25, text_threshold=0.25, num_boxes=2):
@@ -254,6 +255,7 @@ def main(
     text_encoder.to(accelerator.device, dtype=weight_dtype)
     # vae.to(accelerator.device, dtype=weight_dtype)
     ######################
+    unet.to(accelerator.device, dtype=weight_dtype)
     vae.to(dtype=weight_dtype)
 
     ######################
@@ -267,12 +269,6 @@ def main(
     # unet = accelerator.prepare(unet)
     if accelerator.is_main_process:
         accelerator.init_trackers("tuning-free t2v")
-    #######################
-    print(f'vae: {vae.device}')
-    print(f'sam: {sam.device}')
-    print(f'unet: {unet.device}')
-    print(f'grounding_model: {grounding_model.device}')
-    #######################
     if accelerator.is_main_process:
         for step, batch in enumerate(train_dataloader):
             logger.info("inference pixel values")
