@@ -255,18 +255,24 @@ def main(
     # vae.to(accelerator.device, dtype=weight_dtype)
     ######################
     vae.to(dtype=weight_dtype)
+
     ######################
     
     if controlnet is not None:
         controlnet.to(accelerator.device, dtype=weight_dtype)
     grounding_model.to(accelerator.device)
     sam_predictor = SamPredictor(build_sam(checkpoint=sam_checkpoint).to(accelerator.device))
-    sam.to(device=accelerator.device,dtype=weight_dtype)
+    sam.to(device=accelerator.device, dtype=weight_dtype)
     mask_generator = SamAutomaticMaskGenerator(sam)   
     # unet = accelerator.prepare(unet)
     if accelerator.is_main_process:
         accelerator.init_trackers("tuning-free t2v")
-
+    #######################
+    print(f'vae: {vae.device}')
+    print(f'sam: {sam.device}')
+    print(f'unet: {unet.device}')
+    print(f'grounding_model: {grounding_model.device}')
+    #######################
     if accelerator.is_main_process:
         for step, batch in enumerate(train_dataloader):
             logger.info("inference pixel values")
@@ -285,7 +291,16 @@ def main(
             with torch.autocast("cuda"):
                 masked_pixel_values = []
                 for i in tqdm(range(video_length)):
-                    masked_pixel_values.append(torch.from_numpy(np.array(prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device), dtype=np.float32)).to(accelerator.device,weight_dtype).unsqueeze(0))
+                    # masked_pixel_values.append(torch.from_numpy(np.array(prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device), dtype=np.float32)).to(accelerator.device,weight_dtype).unsqueeze(0))
+                    ##########################
+                    masked_pixel_values.append(
+                        torch.from_numpy(
+                            np.array(
+                                prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device),
+                            dtype=np.float32)
+                        ).to(accelerator.device,weight_dtype).unsqueeze(0)
+                    )
+                    ##########################
                 masked_pixel_values = torch.cat(masked_pixel_values)
                 save_videos_grid(rearrange(masked_pixel_values.cpu(),"(b f) c h w -> b c f h w",b=1),"./mask.gif")
                 control = None
