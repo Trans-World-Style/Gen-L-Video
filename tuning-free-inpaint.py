@@ -273,7 +273,7 @@ def main(
     ######################
     unet.to(dtype=weight_dtype)
     vae.to(dtype=weight_dtype)
-
+    print(f'vae: {vae.device}')
     ######################
     
     if controlnet is not None:
