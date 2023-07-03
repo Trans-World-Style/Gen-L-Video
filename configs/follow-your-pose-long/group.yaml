@@ -1,4 +1,4 @@
-pretrained_model_path: "[YourPath]/follow-your-pose"
+pretrained_model_path: "weights/follow-your-pose"
 output_dir: "./results/follow-your-pose-t2v/group/"
 
 
