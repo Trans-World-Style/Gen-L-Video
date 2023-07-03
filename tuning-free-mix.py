@@ -142,9 +142,6 @@ def main(
     vae.to(dtype=weight_dtype)
     # unet.to(accelerator.device, dtype=weight_dtype)
     depth_estimator.to(dtype=weight_dtype)
-    unet, train_dataloader = accelerator.prepare(
-        unet, train_dataloader
-    )
     #######################################
     # unet = accelerator.prepare(unet)
     # We need to initialize the trackers we use, and also store our configuration.
