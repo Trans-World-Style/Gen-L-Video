@@ -1,5 +1,5 @@
 # The Minimum VRAM Requirement is around 12-16 GB. Longer video will not cost more.
-pretrained_model_path: "./weights/stable-diffusion-2-depth"
+pretrained_model_path: "stabilityai/stable-diffusion-2-depth"
 output_dir: "./results/tuning-free-mix/car-turn"
 
 train_data:
