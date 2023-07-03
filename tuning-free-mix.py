@@ -233,12 +233,19 @@ def main(
                 torch.save(ddim_inv_latent, inv_latents_path)
             
             for idx, prompt in enumerate(validation_data.prompts):
-                with torch.autocast("cuda"):
-                    validation_multidata = copy.deepcopy(validation_data)
-                    validation_multidata.video_length = ddim_inv_latent.shape[2]
-                    prompt = list(prompt)
-                    sample = validation_pipeline_depth.forward_mix(prompt,pixel_values, generator=generator, latents=ddim_inv_latent,window_size=validation_data.video_length,
-                                             **validation_multidata).videos
+                # with torch.autocast("cuda"):
+                #     validation_multidata = copy.deepcopy(validation_data)
+                #     validation_multidata.video_length = ddim_inv_latent.shape[2]
+                #     prompt = list(prompt)
+                #     sample = validation_pipeline_depth.forward_mix(prompt,pixel_values, generator=generator, latents=ddim_inv_latent,window_size=validation_data.video_length,
+                #                              **validation_multidata).videos
+                ##########################
+                validation_multidata = copy.deepcopy(validation_data)
+                validation_multidata.video_length = ddim_inv_latent.shape[2]
+                prompt = list(prompt)
+                sample = validation_pipeline_depth.forward_mix(prompt,pixel_values, generator=generator, latents=ddim_inv_latent,window_size=validation_data.video_length,
+                                         **validation_multidata).videos
+                ##########################
                 save_videos_grid(sample, f"{output_dir}/samples/sample/{prompt}.gif")
                 samples.append(sample)
             samples = torch.concat(samples)
