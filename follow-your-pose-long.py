@@ -112,7 +112,7 @@ def main(
 
     # Get the validation pipeline
     validation_pipeline = FYPLongPipeline(
-        vae=vae, text_encoder=text_encoder, unet=unet, tokenizer=tokenizer, 
+        vae=vae, text_encoder=text_encoder, unet=unet, tokenizer=tokenizer,
         scheduler=noise_scheduler
     )
     validation_pipeline.enable_vae_slicing()
@@ -178,6 +178,9 @@ def main(
                         validation_multidata = copy.deepcopy(validation_data)
                         validation_multidata.video_length = ddim_inv_latent.shape[2]
                         prompt = list(prompt)
+                        print(f'validation_pipeline: {validation_pipeline.device}')
+                        print(f'pixel_values: {pixel_values.device}')
+                        print(f'ddim_inv_latent: {ddim_inv_latent.device}')
                         sample = validation_pipeline.gen_long_mix(prompt,control=pixel_values, generator=generator, latents=ddim_inv_latent,window_size=validation_data.video_length,
                                                  **validation_multidata).videos
                     save_videos_grid(sample, f"{output_dir}/samples/sample-mix/{prompt[0]}.gif")
