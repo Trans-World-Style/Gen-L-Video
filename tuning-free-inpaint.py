@@ -84,6 +84,7 @@ def prompt2mask(original_image, caption,grounding_model=None,sam_predictor=None,
     if not caption.endswith("."):
         caption = caption + "."
     _, image_tensor = image_transform_grounding(original_image)
+    print(f'image_tensor: {image_tensor.device}')
     boxes, logits, phrases = predict(grounding_model,
                                      image_tensor, caption, box_threshold, text_threshold, device=device)
     H, W = original_image.size[1], original_image.size[0]
