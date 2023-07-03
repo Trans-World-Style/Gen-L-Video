@@ -141,7 +141,7 @@ def main(
     text_encoder.to(dtype=weight_dtype)
     vae.to(dtype=weight_dtype)
     # unet.to(accelerator.device, dtype=weight_dtype)
-    depth_estimator.to(dtype=weight_dtype)
+    depth_estimator.to(accelerator.device, dtype=weight_dtype)
     #######################################
     # unet = accelerator.prepare(unet)
     # We need to initialize the trackers we use, and also store our configuration.
