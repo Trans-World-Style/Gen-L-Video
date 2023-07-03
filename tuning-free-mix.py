@@ -200,8 +200,8 @@ def main(
                         ddim_inv_latent = ddim_inversion_long(
                             validation_pipeline_depth, ddim_inv_scheduler, video_latent=latents[:,:,i:i+clip_length].to(validation_pipeline_depth.device),
                             num_inv_steps=validation_data.num_inv_steps, prompt="", window_size=clip_length, stride=clip_length,
-                            pixel_values=pixel_values[i:i+clip_length])[-1].to(validation_pipeline_depth.device, dtype=weight_dtype
-                        )
+                            pixel_values=pixel_values[i:i+clip_length].to(validation_pipeline_depth.device)
+                        )[-1].to(dtype=weight_dtype)
                         ddim_inv_latent_lst.append(ddim_inv_latent)
                         
                     inv_latents_path = os.path.join(output_dir, f"inv_latents/ddim_latent-iso.pt")
