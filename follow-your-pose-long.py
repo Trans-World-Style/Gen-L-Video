@@ -76,10 +76,11 @@ def main(
         OmegaConf.save(config, os.path.join(output_dir, 'config.yaml'))
 
     # Load scheduler, tokenizer and models.
+    device_map = 'balanced_low_0'
     noise_scheduler = DDIMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
     tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
     text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
-    vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae")
+    vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
 
     # Freeze vae and text_encoder
@@ -130,9 +131,11 @@ def main(
         weight_dtype = torch.bfloat16
 
     text_encoder.to(accelerator.device, dtype=weight_dtype)
-    vae.to(accelerator.device, dtype=weight_dtype)
-    # unet.to(accelerator.device, dtype=weight_dtype)
-    unet = accelerator.prepare(unet)
+    ################################
+    vae.to(dtype=weight_dtype)
+    ################################
+    unet.to(accelerator.device, dtype=weight_dtype)
+    # unet = accelerator.prepare(unet)
     # We need to initialize the trackers we use, and also store our configuration.
     # The trackers initializes automatically on the main process.
     if accelerator.is_main_process:
