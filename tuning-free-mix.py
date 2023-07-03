@@ -98,11 +98,8 @@ def main(
     noise_scheduler = DDIMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
     tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
     text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
-    print(f'text_encoder: {text_encoder.device}')
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
-    print(f'vae: {vae.device}')
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
-    print(f'unet: {unet.device}')
     depth_estimator = DPTForDepthEstimation.from_pretrained(pretrained_model_path, subfolder="depth_estimator")
     feature_extractor = DPTImageProcessor.from_pretrained(pretrained_model_path, subfolder="feature_extractor")
 
@@ -162,6 +159,10 @@ def main(
     vae.to(dtype=weight_dtype)
     unet.to(accelerator.device, dtype=weight_dtype)
     depth_estimator.to(accelerator.device, dtype=weight_dtype)
+
+    print(f'text_encoder: {text_encoder.device}')
+    print(f'vae: {vae.device}')
+    print(f'unet: {unet.device}')
     #######################################
     # unet = accelerator.prepare(unet)
     # We need to initialize the trackers we use, and also store our configuration.
@@ -179,8 +180,8 @@ def main(
             pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
             latents = [ ]
             for i in range(0,video_length,validation_data.video_length):
-                check_gpu()
-                latents.append(vae.encode(pixel_values[i:i+validation_data.video_length]).latent_dist.sample().to(unet.device))
+                check_gpu('in latents')
+                latents.append(vae.encode(pixel_values[i:i+validation_data.video_length]).latent_dist.sample())
             latents = torch.cat(latents,dim=0)
             latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
             latents = latents * 0.18215
