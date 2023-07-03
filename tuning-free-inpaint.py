@@ -278,7 +278,7 @@ def main(
     
     if controlnet is not None:
         controlnet.to(accelerator.device, dtype=weight_dtype)
-    grounding_model.to(accelerator.device)
+    # grounding_model.to(accelerator.device)
     sam_predictor = SamPredictor(build_sam(checkpoint=sam_checkpoint).to(accelerator.device))
     sam.to(device=accelerator.device, dtype=weight_dtype)
     mask_generator = SamAutomaticMaskGenerator(sam)   
@@ -347,7 +347,7 @@ def main(
                 masked_pixel_values.append(
                     torch.from_numpy(
                         np.array(
-                            prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device),
+                            prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,vae.device),
                         dtype=np.float32)
                     ).to('cpu', weight_dtype).unsqueeze(0)
                 )
