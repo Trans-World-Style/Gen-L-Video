@@ -165,8 +165,9 @@ def main(
                     print(f'validation_pipeline: {validation_pipeline.device}')
                     print(f'pixel_values: {pixel_values.device}')
                     print(f'ddim_inv_latent: {ddim_inv_latent.device}')
-                    sample = validation_pipeline.gen_long(prompt,control=pixel_values, generator=generator, latents=ddim_inv_latent,window_size=validation_data.video_length,
-                                             **validation_multidata).videos
+                    sample = validation_pipeline.gen_long(prompt,control=pixel_values.to(validation_pipeline.device),
+                                                          generator=generator, latents=ddim_inv_latent.to(validation_pipeline.device),
+                                                          window_size=validation_data.video_length, **validation_multidata).videos
                 save_videos_grid(sample, f"{output_dir}/samples/sample/{prompt}.gif")
                 samples.append(sample)
             samples = torch.concat(samples)
