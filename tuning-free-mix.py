@@ -78,8 +78,7 @@ def main(
 
     # Load scheduler, tokenizer and models.
     device_map = 'balanced_low_0'
-    noise_scheduler = DDIMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map=device_map)
-    print(f'noise_scheduler: {noise_scheduler.device}')
+    noise_scheduler = DDIMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
     tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer", device_map=device_map)
     print(f'tokenizer: {tokenizer.device}')
     text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
