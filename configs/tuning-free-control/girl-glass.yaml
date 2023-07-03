@@ -1,5 +1,5 @@
 # The Minimum VRAM Requirement is around 10-15 GB. Longer video will not cost more.
-pretrained_model_path: "weights/chilloutmix"
+pretrained_model_path: "stablediffusionapi/chilloutmix"
 
 output_dir: "./results/tuning-free-control/girl-glass/"
 
@@ -12,7 +12,7 @@ train_data:
   height: 512
   sample_start_idx: 0
   sample_frame_rate: 2
-controlnet_path: "[Your Path]/sd-controlnet-canny"
+controlnet_path: "lllyasviel/sd-controlnet-canny"
 controlnet_scale: 0.6
 validation_data:
   prompts:
