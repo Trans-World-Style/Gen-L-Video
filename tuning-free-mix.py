@@ -95,7 +95,7 @@ def main(
 
     # Load scheduler, tokenizer and models.
     # device_map = 'balanced_low_0'
-    device_map = 'auto'
+    device_map = 'balance'
     noise_scheduler = DDIMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
     tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
     text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
