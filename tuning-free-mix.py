@@ -86,7 +86,7 @@ def main(
     print(f'vae: {vae.device}')
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
     print(f'unet: {unet.device}')
-    depth_estimator = DPTForDepthEstimation.from_pretrained(pretrained_model_path, subfolder="depth_estimator")
+    depth_estimator = DPTForDepthEstimation.from_pretrained(pretrained_model_path, subfolder="depth_estimator", device_map=device_map)
     feature_extractor = DPTImageProcessor.from_pretrained(pretrained_model_path, subfolder="feature_extractor")
 
     # Freeze vae and text_encoder
