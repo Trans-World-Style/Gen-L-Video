@@ -1,5 +1,5 @@
 # The Minimum VRAM Requirement is around 10-15 GB. Longer video will not cost more.
-pretrained_model_path: "[Your Path]/chilloutmix"
+pretrained_model_path: "weights/chilloutmix"
 
 output_dir: "./results/tuning-free-control/girl-glass/"
 
