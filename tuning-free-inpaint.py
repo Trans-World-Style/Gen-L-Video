@@ -44,7 +44,6 @@ def load_groundingdino_model(model_config_path, model_checkpoint_path, device):
     checkpoint = torch.load(model_checkpoint_path, map_location="cpu")
     load_res = model.load_state_dict(clean_state_dict(checkpoint["model"]), strict=False)
     _ = model.eval()
-    print(f'fdasoijfoajdsifjikj: {model.device}')
     return model
 
 def prompt2mask(original_image, caption,grounding_model=None,sam_predictor=None, device="cuda",box_threshold=0.25, text_threshold=0.25, num_boxes=2):
