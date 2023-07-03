@@ -36,6 +36,23 @@ from segment_anything import sam_model_registry, SamAutomaticMaskGenerator
 from segment_anything.utils.amg import remove_small_regions
 from PIL import Image
 
+def check_gpu(message=None):
+    import GPUtil
+
+    print('--------------------')
+    if message is not None:
+        print(message)
+
+    # GPU 정보를 가져옴
+    gpus = GPUtil.getGPUs()
+
+    # 각 GPU의 정보 출력
+    for gpu in gpus:
+        print(f"GPU {gpu.id}: {gpu.name}")
+        print(f"  Free Memory: {gpu.memoryFree}MB")
+        print(f"  Used Memory: {gpu.memoryUsed}MB")
+        print(f"  Total Memory: {gpu.memoryTotal}MB")
+        print("")
 
 def load_groundingdino_model(model_config_path, model_checkpoint_path, device):
     args = SLConfig.fromfile(model_config_path)
@@ -282,35 +299,87 @@ def main(
             latents = torch.cat(latents,dim=0)
             latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
             latents = latents * 0.18215
-            pixel_values = pixel_values
-            with torch.autocast("cuda"):
-                masked_pixel_values = []
+            # with torch.autocast("cuda"):
+            #     masked_pixel_values = []
+            #     for i in tqdm(range(video_length)):
+            #         # masked_pixel_values.append(torch.from_numpy(np.array(prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device), dtype=np.float32)).to(accelerator.device,weight_dtype).unsqueeze(0))
+            #         ##########################
+            #         masked_pixel_values.append(
+            #             torch.from_numpy(
+            #                 np.array(
+            #                     prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device),
+            #                 dtype=np.float32)
+            #             ).to(accelerator.device,weight_dtype).unsqueeze(0)
+            #         )
+            #         ##########################
+            #     masked_pixel_values = torch.cat(masked_pixel_values)
+            #     save_videos_grid(rearrange(masked_pixel_values.cpu(),"(b f) c h w -> b c f h w",b=1),"./mask.gif")
+            #     control = None
+            #     if controlnet is not None:
+            #         control = []
+            #         seg = []
+            #         for i in tqdm(range(video_length)):
+            #             seg_map, control_map = get_sam_control((pixel_values[i]+1)/2.,mask_generator)
+            #             control.append(torch.from_numpy(control_map).float().permute(2,0,1).to(accelerator.device,weight_dtype).unsqueeze(0))
+            #             seg.append(torch.from_numpy(seg_map).float().permute(2,0,1).to(accelerator.device,weight_dtype).unsqueeze(0))
+            #         control = torch.cat(control)
+            #         seg = torch.cat(seg)
+            #         control = rearrange(control,"(b f) c h w -> b c f h w",b=1)
+            #         save_videos_grid(control.detach().cpu(),"./controlmap.gif")
+            #         save_videos_grid(rearrange(seg.detach().cpu(),"(b f) c h w -> b c f h w",b=1),"./segmap.gif")
+            #     masked_pixel_values = []
+            #     for i in tqdm(range(video_length)):
+            #         # masked_pixel_values.append(torch.from_numpy(np.array(prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device), dtype=np.float32)).to(accelerator.device,weight_dtype).unsqueeze(0))
+            #         ##########################
+            #         masked_pixel_values.append(
+            #             torch.from_numpy(
+            #                 np.array(
+            #                     prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device),
+            #                 dtype=np.float32)
+            #             ).to(accelerator.device,weight_dtype).unsqueeze(0)
+            #         )
+            #         ##########################
+
+            masked_pixel_values = []
+            for i in tqdm(range(video_length)):
+                # masked_pixel_values.append(torch.from_numpy(np.array(prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device), dtype=np.float32)).to(accelerator.device,weight_dtype).unsqueeze(0))
+                ##########################
+                masked_pixel_values.append(
+                    torch.from_numpy(
+                        np.array(
+                            prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device),
+                        dtype=np.float32)
+                    ).to(accelerator.device,weight_dtype).unsqueeze(0)
+                )
+                ##########################
+            masked_pixel_values = torch.cat(masked_pixel_values)
+            save_videos_grid(rearrange(masked_pixel_values.cpu(),"(b f) c h w -> b c f h w",b=1),"./mask.gif")
+            control = None
+            if controlnet is not None:
+                control = []
+                seg = []
                 for i in tqdm(range(video_length)):
-                    # masked_pixel_values.append(torch.from_numpy(np.array(prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device), dtype=np.float32)).to(accelerator.device,weight_dtype).unsqueeze(0))
-                    ##########################
-                    masked_pixel_values.append(
-                        torch.from_numpy(
-                            np.array(
-                                prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device),
-                            dtype=np.float32)
-                        ).to(accelerator.device,weight_dtype).unsqueeze(0)
-                    )
-                    ##########################
-                masked_pixel_values = torch.cat(masked_pixel_values)
-                save_videos_grid(rearrange(masked_pixel_values.cpu(),"(b f) c h w -> b c f h w",b=1),"./mask.gif")
-                control = None
-                if controlnet is not None:
-                    control = []
-                    seg = []
-                    for i in tqdm(range(video_length)):
-                        seg_map, control_map = get_sam_control((pixel_values[i]+1)/2.,mask_generator)
-                        control.append(torch.from_numpy(control_map).float().permute(2,0,1).to(accelerator.device,weight_dtype).unsqueeze(0))
-                        seg.append(torch.from_numpy(seg_map).float().permute(2,0,1).to(accelerator.device,weight_dtype).unsqueeze(0))
-                    control = torch.cat(control)
-                    seg = torch.cat(seg)
-                    control = rearrange(control,"(b f) c h w -> b c f h w",b=1)
-                    save_videos_grid(control.detach().cpu(),"./controlmap.gif")
-                    save_videos_grid(rearrange(seg.detach().cpu(),"(b f) c h w -> b c f h w",b=1),"./segmap.gif")
+                    seg_map, control_map = get_sam_control((pixel_values[i]+1)/2.,mask_generator)
+                    control.append(torch.from_numpy(control_map).float().permute(2,0,1).to(accelerator.device,weight_dtype).unsqueeze(0))
+                    seg.append(torch.from_numpy(seg_map).float().permute(2,0,1).to(accelerator.device,weight_dtype).unsqueeze(0))
+                control = torch.cat(control)
+                seg = torch.cat(seg)
+                control = rearrange(control,"(b f) c h w -> b c f h w",b=1)
+                save_videos_grid(control.detach().cpu(),"./controlmap.gif")
+                save_videos_grid(rearrange(seg.detach().cpu(),"(b f) c h w -> b c f h w",b=1),"./segmap.gif")
+            masked_pixel_values = []
+            for i in tqdm(range(video_length)):
+                # masked_pixel_values.append(torch.from_numpy(np.array(prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device), dtype=np.float32)).to(accelerator.device,weight_dtype).unsqueeze(0))
+                ##########################
+                masked_pixel_values.append(
+                    torch.from_numpy(
+                        np.array(
+                            prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device),
+                        dtype=np.float32)
+                    ).to(accelerator.device,weight_dtype).unsqueeze(0)
+                )
+                ##########################
+
             del sam_predictor
             del grounding_model
             max_memory_allocated = torch.cuda.max_memory_allocated() / (1024 ** 3) 
