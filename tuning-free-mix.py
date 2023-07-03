@@ -77,13 +77,14 @@ def main(
         OmegaConf.save(config, os.path.join(output_dir, 'config.yaml'))
 
     # Load scheduler, tokenizer and models.
-    noise_scheduler = DDIMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler")
-    tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer")
-    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder")
-    vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae")
+    device_map = 'balanced_low_0'
+    noise_scheduler = DDIMScheduler.from_pretrained(pretrained_model_path, subfolder="scheduler", device_map=device_map)
+    tokenizer = CLIPTokenizer.from_pretrained(pretrained_model_path, subfolder="tokenizer", device_map=device_map)
+    text_encoder = CLIPTextModel.from_pretrained(pretrained_model_path, subfolder="text_encoder", device_map=device_map)
+    vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
-    depth_estimator = DPTForDepthEstimation.from_pretrained(pretrained_model_path, subfolder="depth_estimator")
-    feature_extractor = DPTImageProcessor.from_pretrained(pretrained_model_path, subfolder="feature_extractor")
+    depth_estimator = DPTForDepthEstimation.from_pretrained(pretrained_model_path, subfolder="depth_estimator", device_map=device_map)
+    feature_extractor = DPTImageProcessor.from_pretrained(pretrained_model_path, subfolder="feature_extractor", device_map=device_map)
 
     # Freeze vae and text_encoder
     vae.requires_grad_(False)
@@ -131,12 +132,21 @@ def main(
     elif accelerator.mixed_precision == "bf16":
         weight_dtype = torch.bfloat16
 
-    text_encoder.to(accelerator.device, dtype=weight_dtype)
-    vae.to(accelerator.device, dtype=weight_dtype)
-    # unet.to(accelerator.device, dtype=weight_dtype)
-    depth_estimator.to(accelerator.device, dtype=weight_dtype)
+    # text_encoder.to(accelerator.device, dtype=weight_dtype)
+    # vae.to(accelerator.device, dtype=weight_dtype)
+    # # unet.to(accelerator.device, dtype=weight_dtype)
+    # depth_estimator.to(accelerator.device, dtype=weight_dtype)
 
-    unet = accelerator.prepare(unet)
+    #######################################
+    text_encoder.to(dtype=weight_dtype)
+    vae.to(dtype=weight_dtype)
+    # unet.to(accelerator.device, dtype=weight_dtype)
+    depth_estimator.to(dtype=weight_dtype)
+    unet, train_dataloader = accelerator.prepare(
+        unet, train_dataloader
+    )
+    #######################################
+    # unet = accelerator.prepare(unet)
     # We need to initialize the trackers we use, and also store our configuration.
     # The trackers initializes automatically on the main process.
     if accelerator.is_main_process:
