@@ -252,7 +252,10 @@ def main(
         weight_dtype = torch.bfloat16
 
     text_encoder.to(accelerator.device, dtype=weight_dtype)
-    vae.to(accelerator.device, dtype=weight_dtype)
+    # vae.to(accelerator.device, dtype=weight_dtype)
+    ######################
+    vae.to(dtype=weight_dtype)
+    ######################
     
     if controlnet is not None:
         controlnet.to(accelerator.device, dtype=weight_dtype)
@@ -260,7 +263,7 @@ def main(
     sam_predictor = SamPredictor(build_sam(checkpoint=sam_checkpoint).to(accelerator.device))
     sam.to(device=accelerator.device,dtype=weight_dtype)
     mask_generator = SamAutomaticMaskGenerator(sam)   
-    unet = accelerator.prepare(unet)
+    # unet = accelerator.prepare(unet)
     if accelerator.is_main_process:
         accelerator.init_trackers("tuning-free t2v")
 
