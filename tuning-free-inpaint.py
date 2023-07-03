@@ -349,7 +349,7 @@ def main(
                         np.array(
                             prompt2mask((pixel_values[i]+1)/2., mask_prompt,grounding_model,sam_predictor,accelerator.device),
                         dtype=np.float32)
-                    ).to(accelerator.device,weight_dtype).unsqueeze(0)
+                    ).to('cpu', weight_dtype).unsqueeze(0)
                 )
                 ##########################
             masked_pixel_values = torch.cat(masked_pixel_values)
