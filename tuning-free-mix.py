@@ -160,10 +160,10 @@ def main(
     vae.to(dtype=weight_dtype)
     unet.to(accelerator.device, dtype=weight_dtype)
     depth_estimator.to(accelerator.device, dtype=weight_dtype)
-
-    print(f'text_encoder: {text_encoder.device}')
-    print(f'vae: {vae.device}')
-    print(f'unet: {unet.device}')
+    '''
+    1. vae만 balanced_low_0로 다른 cuda device로 뺌
+    2. ddim_inversion_long에서 device 맞춰줌
+    '''
     #######################################
     # unet = accelerator.prepare(unet)
     # We need to initialize the trackers we use, and also store our configuration.
@@ -181,7 +181,6 @@ def main(
             pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
             latents = [ ]
             for i in range(0,video_length,validation_data.video_length):
-                check_gpu('in latents')
                 latents.append(vae.encode(pixel_values[i:i+validation_data.video_length]).latent_dist.sample())
             latents = torch.cat(latents,dim=0)
             latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
@@ -227,8 +226,10 @@ def main(
             if validation_data.use_inv_latent:
                 inv_latents_path = os.path.join(output_dir, f"inv_latents/ddim_latent.pt")
                 ddim_inv_latent = ddim_inversion_long(
-                    validation_pipeline_depth, ddim_inv_scheduler, video_latent=latents,
-                    num_inv_steps=validation_data.num_inv_steps, prompt="",window_size=clip_length,stride=validation_data.stride, pixel_values=pixel_values)[-1].to(weight_dtype)
+                    validation_pipeline_depth, ddim_inv_scheduler, video_latent=latents.to(validation_pipeline_depth.device),
+                    num_inv_steps=validation_data.num_inv_steps, prompt="",window_size=clip_length,
+                    stride=validation_data.stride, pixel_values=pixel_values.to(validation_pipeline_depth.device)
+                )[-1].to(weight_dtype)
                 torch.save(ddim_inv_latent, inv_latents_path)
             
             for idx, prompt in enumerate(validation_data.prompts):
