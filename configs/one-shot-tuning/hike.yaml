@@ -31,7 +31,7 @@ learning_rate: 3e-5
 train_batch_size: 1
 max_train_steps: 4
 checkpointing_steps: 4
-validation_steps: 1
+validation_steps: 2
 start_validatoin_steps: -1
 trainable_modules:
   - "attn_temp"
