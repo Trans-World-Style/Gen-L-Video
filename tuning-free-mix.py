@@ -83,7 +83,7 @@ def main(
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae")
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
     depth_estimator = DPTForDepthEstimation.from_pretrained(pretrained_model_path, subfolder="depth_estimator")
-    feature_extractor = DPTImageProcessor.from_pretrained(pretrained_model_path)
+    feature_extractor = DPTImageProcessor.from_pretrained(pretrained_model_path, subfolder="feature_extractor")
 
     # Freeze vae and text_encoder
     vae.requires_grad_(False)
