@@ -228,7 +228,7 @@ class GroundingDINO(nn.Module):
             captions = kw["captions"]
         else:
             captions = [t["caption"] for t in targets]
-
+            print(f'targets: {targets[0].device}')
         # encoder texts
         tokenized = self.tokenizer(captions, padding="longest", return_tensors="pt").to(
             samples.device
