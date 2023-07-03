@@ -1,5 +1,5 @@
 # The Minimum VRAM Requirement is around 16-20 GB. Longer video will not cost more.
-pretrained_model_path: "weights/stable-diffusion-2-inpainting"
+pretrained_model_path: "weights/stable_diffusion-2-inpainting"
 output_dir: "./results/tuning-free-inpaint/girl-glass"
 
 train_data:
