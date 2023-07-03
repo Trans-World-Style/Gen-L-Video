@@ -254,7 +254,7 @@ def main(
     text_encoder.to(accelerator.device, dtype=weight_dtype)
     # vae.to(accelerator.device, dtype=weight_dtype)
     ######################
-    unet.to(accelerator.device, dtype=weight_dtype)
+    unet.to(vae.device, dtype=weight_dtype)
     vae.to(dtype=weight_dtype)
 
     ######################
