@@ -428,6 +428,7 @@ class FYPLongPipeline(DiffusionPipeline):
         window_size: Optional[int] = 16,
         stride: Optional[int] = 8,
         control = None,
+        device = None,
         **kwargs,
     ):
         # Default height and width to unet
@@ -439,7 +440,8 @@ class FYPLongPipeline(DiffusionPipeline):
 
         # Define call parameters
         batch_size = 1 if isinstance(prompt, str) else len(prompt)
-        device = self._execution_device
+        if device is None:
+            device = self._execution_device
         # here `guidance_scale` is defined analog to the guidance weight `w` of equation (2)
         # of the Imagen paper: https://arxiv.org/pdf/2205.11487.pdf . `guidance_scale = 1`
         # corresponds to doing no classifier free guidance.
