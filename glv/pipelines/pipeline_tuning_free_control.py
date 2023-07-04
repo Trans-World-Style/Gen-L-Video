@@ -170,12 +170,18 @@ class TuningFreeControlPipeline(DiffusionPipeline):
             )
 
         if hasattr(self.text_encoder.config, "use_attention_mask") and self.text_encoder.config.use_attention_mask:
-            attention_mask = text_inputs.attention_mask.to(self.text_encoder.device)
+            attention_mask = text_inputs.attention_mask.to(device)
         else:
             attention_mask = None
 
+        print(f'device: {device}')
+        print(f'self.text_encoder: {self.text_encoder.device}')
+        print(f'text_input_ids: {text_input_ids.to(device).device}')
+        if attention_mask:
+            print(f'attention_mask: {attention_mask.device}')
+
         text_embeddings = self.text_encoder(
-            text_input_ids.to(self.text_encoder.device),
+            text_input_ids.to(device),
             attention_mask=attention_mask,
         )
         text_embeddings = text_embeddings[0]
