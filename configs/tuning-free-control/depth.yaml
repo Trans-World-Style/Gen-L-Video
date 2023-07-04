@@ -16,10 +16,11 @@ controlnet_path: "weights/sd-controlnet-depth"
 controlnet_scale: 0.6
 validation_data:
   prompts:
-   - 'lego style 4k'
-   - 'harry potter style 4k'
-   - 'star wars style 4k'
-   - 'disney style 4k'
+   - 'lego style fantastic 4k'
+   - 'harry potter style fantastic 4k'
+   - 'star wars style fantastic 4k'
+   - 'disney style fantastic 4k'
+   - 'simson style fantastic 4k'
   video_length: 15
   width: 512
   height: 512
