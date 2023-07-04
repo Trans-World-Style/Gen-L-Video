@@ -1,13 +1,13 @@
 # The Minimum VRAM Requirement is around 10-15 GB. Longer video will not cost more.
 pretrained_model_path: "weights/chilloutmix"
 
-output_dir: "./results/tuning-free-control/canny2/"
+output_dir: "./results/tuning-free-control/canny3/"
 
 train_data:
   video_path: "t_data/hike.mp4"
   control_path: "c_data/canny/hike.mp4"
   prompt: ""
-  n_sample_frames: 15
+  n_sample_frames: 16
   width: 512
   height: 512
   sample_start_idx: 0
@@ -16,12 +16,10 @@ controlnet_path: "weights/sd-controlnet-depth"
 controlnet_scale: 0.6
 validation_data:
   prompts:
-   - 'lego style fantastic 4k'
-   - 'harry potter style fantastic 4k'
-   - 'star wars style fantastic 4k'
-   - 'disney style fantastic 4k'
-   - 'simson style fantastic 4k'
-  video_length: 15
+   - 'lego animation style, fantastic'
+   - 'disney animation style, fantastic'
+   - 'simpson animation style, fantastic'
+  video_length: 16
   width: 512
   height: 512
   num_inference_steps: 50
