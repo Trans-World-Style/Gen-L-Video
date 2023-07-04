@@ -62,6 +62,9 @@ def next_step(model_output: Union[torch.FloatTensor, np.ndarray], timestep: int,
 
 
 def get_noise_pred_single(latents, t, context, unet, clip_id,control):
+    print(f'llllll: {latents.shape}')
+    print(f'contttt: {control.shape}')
+    print(f'context: {context.shape}')
     noise_pred = unet(latents, t, clip_id=clip_id, encoder_hidden_states=context,control=control)["sample"]
     return noise_pred
 
