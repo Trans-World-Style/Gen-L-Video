@@ -170,8 +170,6 @@ def main(
                 # with torch.autocast("cuda"):
                 validation_multidata = copy.deepcopy(validation_data)
                 validation_multidata.video_length = video_length
-                print(f'val_len: {validation_data.video_length}')
-                print(f'val_multi: {validation_multidata}')
                 sample = validation_pipeline.gen_long(prompt, latents.to(validation_pipeline.device), generator=generator,window_size=validation_data.video_length,control=control.to(validation_pipeline.device),
                                          **validation_multidata).videos
                 save_videos_grid(sample, f"{output_dir}/samples/sample/{idx}-{prompt[:32]}.gif")
