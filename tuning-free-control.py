@@ -141,7 +141,7 @@ def main(
     # unet = accelerator.prepare(unet)
     if accelerator.is_main_process:
         accelerator.init_trackers("tuning-free t2v")
-
+    print(f"prompts: {validation_data.prompts}")
     if accelerator.is_main_process:
         for step, batch in enumerate(train_dataloader):
             logger.info("inference pixel values")
@@ -156,14 +156,12 @@ def main(
             latents = torch.cat(latents,dim=0)
             latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
             latents = latents * 0.18215
-            pixel_values = pixel_values
             generator = torch.Generator(device=accelerator.device)
             generator.manual_seed(seed)
-            clip_length = validation_data.video_length
             samples = []
             control = batch.get("full_control_video")
             if control is not None:
-                control= rearrange(control, "b f c h w -> b c f h w")
+                control = rearrange(control, "b f c h w -> b c f h w")
                 control = control[:,:,:video_length]
                 control = control.to(accelerator.device,weight_dtype)
             for idx, prompt in enumerate(validation_data.prompts):
@@ -174,11 +172,11 @@ def main(
                                          **validation_multidata).videos
                 save_videos_grid(sample, f"{output_dir}/samples/sample/{idx}-{prompt[:32]}.gif")
                 samples.append(sample)
-            samples = torch.concat(samples)
-            save_path = f"{output_dir}/samples/sample.gif"
-            save_videos_grid(samples, save_path)
-            logger.info(f"Saved samples to {save_path}")
-            # break
+            # samples = torch.concat(samples)
+            # save_path = f"{output_dir}/samples/sample.gif"
+            # save_videos_grid(samples, save_path)
+            # logger.info(f"Saved samples to {save_path}")
+            break
             
 
 if __name__ == "__main__":

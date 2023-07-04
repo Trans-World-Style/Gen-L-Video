@@ -428,8 +428,6 @@ class TuningFreeControlPipeline(DiffusionPipeline):
         )
         latents_dtype = latents.dtype
 
-
-
         views = get_views(video_length,window_size=window_size,stride=stride)
         count = torch.zeros_like(latents)
         value = torch.zeros_like(latents)
