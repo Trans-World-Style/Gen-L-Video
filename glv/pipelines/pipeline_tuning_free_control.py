@@ -174,6 +174,7 @@ class TuningFreeControlPipeline(DiffusionPipeline):
         else:
             attention_mask = None
 
+        self.text_encoder.to(device)
         print(f'device: {device}')
         print(f'self.text_encoder: {self.text_encoder.device}')
         print(f'text_input_ids: {text_input_ids.to(device).device}')
