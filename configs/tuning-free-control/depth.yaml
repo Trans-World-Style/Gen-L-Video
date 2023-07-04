@@ -1,0 +1,34 @@
+# The Minimum VRAM Requirement is around 10-15 GB. Longer video will not cost more.
+pretrained_model_path: "weights/chilloutmix"
+
+output_dir: "./results/tuning-free-control/girl/"
+
+train_data:
+  video_path: "t_data/hike.mp4"
+  control_path: "c_data/depth/hike.mp4"
+  prompt: ""
+  n_sample_frames: 15
+  width: 512
+  height: 512
+  sample_start_idx: 0
+  sample_frame_rate: 2
+controlnet_path: "weights/sd-controlnet-depth"
+controlnet_scale: 0.6
+validation_data:
+  prompts:
+   - 'lego style 4k'
+  video_length: 15
+  width: 512
+  height: 512
+  num_inference_steps: 50
+  guidance_scale: 12.5
+  use_inv_latent: True
+  num_inv_steps: 50
+  stride: 5
+  use_l2: False
+  strength: 0.2
+
+train_batch_size: 1
+seed: 33
+mixed_precision: fp16
+enable_xformers_memory_efficient_attention: True
