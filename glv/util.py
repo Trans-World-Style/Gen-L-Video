@@ -105,9 +105,6 @@ def ddim_inversion_long(pipeline, ddim_scheduler, video_latent, num_inv_steps, p
         depth_map = rearrange(torch.cat([mask,masked_image_latents],dim=1),"(b f) c h w -> b c f h w",f=video_length)
     elif pixel_values is not None and hasattr(pipeline,"prepare_depth_map"):
         video_length = video_latent.shape[2]
-        print(f'pixel_values: {pixel_values.device}')
-        print(f'pipeline: {pipeline.device}')
-        print(f'video_latent: {video_latent.device}')
         depth_map = pipeline.prepare_depth_map(
             pixel_values,
             None,
