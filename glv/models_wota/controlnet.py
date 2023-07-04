@@ -526,7 +526,6 @@ class ControlNetModel(ModelMixin, ConfigMixin):
                 print(f'ssample: {sample.shape}')
                 print(f'emb: {emb.shape}')
                 print(f'encoder_hidden_states: {encoder_hidden_states.shape}')
-                print(f'attention_mask: {attention_mask.shape}')
                 sample, res_samples = downsample_block(
                     hidden_states=sample,
                     temb=emb,
