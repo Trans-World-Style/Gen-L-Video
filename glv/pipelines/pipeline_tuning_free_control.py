@@ -174,6 +174,9 @@ class TuningFreeControlPipeline(DiffusionPipeline):
         else:
             attention_mask = None
 
+        print(f'device: {device}')
+        print(f'text_input_ids: {text_input_ids.device}')
+        print(f'attention_mask: {attention_mask}')
         text_embeddings = self.text_encoder(
             text_input_ids.to(device),
             attention_mask=attention_mask,
@@ -407,8 +410,6 @@ class TuningFreeControlPipeline(DiffusionPipeline):
         # of the Imagen paper: https://arxiv.org/pdf/2205.11487.pdf . `guidance_scale = 1`
         # corresponds to doing no classifier free guidance.
         do_classifier_free_guidance = guidance_scale > 1.0
-        print(f'device: {device}')
-
         # Encode input prompt
         text_embeddings = self._encode_prompt(
             prompt, device, num_videos_per_prompt, do_classifier_free_guidance, negative_prompt
