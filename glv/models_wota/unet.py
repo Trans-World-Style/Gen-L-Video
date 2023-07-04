@@ -310,7 +310,8 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         # on the fly if necessary.
         
         if control is not None and self.adapter is not None:
-             features_adapter = self.adapter(control)
+            control = control.to(self.device)
+            features_adapter = self.adapter(control)
              
         if control is not None and self.controlnet is not None:
             down_block_additional_residuals , mid_block_additional_residual = self.controlnet(
