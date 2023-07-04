@@ -189,6 +189,8 @@ if __name__ == "__main__":
     config = OmegaConf.load(args.config)
     print(f"--------------------\n{config['train_data']['n_sample_frames']}")
     config['train_data']['n_sample_frames'] = 1
+    config['validation_data']['num_inference_steps'] = 1
+    config['validation_data']['num_inv_steps'] = 1
     main(**config)
     max_memory_allocated = torch.cuda.max_memory_allocated() / (1024 ** 3) 
     print(f"max memory allocated: {max_memory_allocated:.3f} GB.")
