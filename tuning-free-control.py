@@ -158,7 +158,7 @@ def main(
             latents = latents * 0.18215
             generator = torch.Generator(device=accelerator.device)
             generator.manual_seed(seed)
-            # samples = []
+            samples = []
             control = batch.get("full_control_video")
             if control is not None:
                 control = rearrange(control, "b f c h w -> b c f h w")
@@ -172,11 +172,11 @@ def main(
                 sample = validation_pipeline.gen_long(prompt, latents.to(validation_pipeline.device), generator=generator,window_size=validation_data.video_length,control=control.to(validation_pipeline.device),
                                          **validation_multidata).videos
                 save_videos_grid(sample, f"{output_dir}/samples/sample/{idx}-{prompt[:32]}.gif")
-                # samples.append(sample)
-            # samples = torch.concat(samples)
-            # save_path = f"{output_dir}/samples/sample.gif"
-            # save_videos_grid(samples, save_path)
-            # logger.info(f"Saved samples to {save_path}")
+                samples.append(sample)
+            samples = torch.concat(samples)
+            save_path = f"{output_dir}/samples/sample.gif"
+            save_videos_grid(samples, save_path)
+            logger.info(f"Saved samples to {save_path}")
             break
             
 
