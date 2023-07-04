@@ -523,6 +523,10 @@ class ControlNetModel(ModelMixin, ConfigMixin):
         down_block_res_samples = (sample,)
         for downsample_block in self.down_blocks:
             if hasattr(downsample_block, "has_cross_attention") and downsample_block.has_cross_attention:
+                print(f'ssample: {sample.shape}')
+                print(f'emb: {emb.shape}')
+                print(f'encoder_hidden_states: {encoder_hidden_states.shape}')
+                print(f'attention_mask: {attention_mask.shape}')
                 sample, res_samples = downsample_block(
                     hidden_states=sample,
                     temb=emb,
