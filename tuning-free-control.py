@@ -178,20 +178,24 @@ def main(
             save_path = f"{output_dir}/samples/sample.gif"
             save_videos_grid(samples, save_path)
             logger.info(f"Saved samples to {save_path}")
-            break
+            # break
             
 
 if __name__ == "__main__":
+    import time
+    st = time.time()
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="./configs/tuning-free-control/girl-glass.yaml")
     args = parser.parse_args()
 
     config = OmegaConf.load(args.config)
-    print(f"--------------------\n{config['train_data']['n_sample_frames']}")
     config['train_data']['n_sample_frames'] = 15
     config['validation_data']['num_inference_steps'] = 25
     config['validation_data']['num_inv_steps'] = 25
     config['validation_data']['prompts'] = ['simson style']
+    print("----------------")
+    print(config['validation_data']['prompts'])
     main(**config)
     max_memory_allocated = torch.cuda.max_memory_allocated() / (1024 ** 3) 
     print(f"max memory allocated: {max_memory_allocated:.3f} GB.")
+    print(f'running time: {time.time() - st}')
