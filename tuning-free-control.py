@@ -184,6 +184,7 @@ def main(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="./configs/tuning-free-control/girl-glass.yaml")
+    parser.n_sample_frames = 1
     args = parser.parse_args()
 
     main(**OmegaConf.load(args.config))
