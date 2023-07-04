@@ -16,16 +16,16 @@ controlnet_path: "weights/sd-controlnet-depth"
 controlnet_scale: 0.6
 validation_data:
   prompts:
-   - 'lego animation style, fantastic'
-   - 'disney animation style, fantastic'
-   - 'simpson animation style, fantastic'
+   - 'lego animation style, humorous, cartoon'
+   - 'disney animation style, humorous, cartoon'
+   - 'simpson animation style, humorous, cartoon'
   video_length: 16
   width: 512
   height: 512
-  num_inference_steps: 50
+  num_inference_steps: 25
   guidance_scale: 12.5
   use_inv_latent: True
-  num_inv_steps: 50
+  num_inv_steps: 25
   stride: 5
   use_l2: False
   strength: 0.2
