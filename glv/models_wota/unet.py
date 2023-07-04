@@ -318,10 +318,10 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
              
         if control is not None and self.controlnet is not None:
             down_block_additional_residuals , mid_block_additional_residual = self.controlnet(
-                sample[:,:4],
+                sample[:,:4].to(self.controlnet.device),
                 timestep,
-                encoder_hidden_states=encoder_hidden_states,
-                controlnet_cond=control,
+                encoder_hidden_states=encoder_hidden_states.to(self.controlnet.device),
+                controlnet_cond=control.to(self.controlnet.device),
                 # conditioning_scale=1,
                 conditioning_scale=self.controlnet_scale,
                 guess_mode=False,
