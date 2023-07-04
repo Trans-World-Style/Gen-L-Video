@@ -13,8 +13,8 @@ train_data:
   height: 512
   sample_start_idx: 0
   sample_frame_rate: 2
-#controlnet_path: "weights/sd-controlnet-canny"
-controlnet_path: "weights/edit-anything-v0-3"
+controlnet_path: "weights/sd-controlnet-canny"
+#controlnet_path: "weights/edit-anything-v0-3"
 controlnet_scale: 0.6
 validation_data:
   prompts:
