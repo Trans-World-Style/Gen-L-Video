@@ -189,9 +189,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     config = OmegaConf.load(args.config)
-    config['train_data']['n_sample_frames'] = 15
-    config['validation_data']['num_inference_steps'] = 25
-    config['validation_data']['num_inv_steps'] = 25
+    # config['train_data']['n_sample_frames'] = 15
+    # config['validation_data']['num_inference_steps'] = 50
+    # config['validation_data']['num_inv_steps'] = 50
     config['validation_data']['prompts'] = ['simson style']
     print("----------------")
     print(config['validation_data']['prompts'])
