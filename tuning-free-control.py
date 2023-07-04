@@ -184,8 +184,8 @@ def main(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="./configs/tuning-free-control/girl-glass.yaml")
-    parser.n_sample_frames = 1
     args = parser.parse_args()
+    args.config.n_sample_frames = 1
 
     main(**OmegaConf.load(args.config))
     max_memory_allocated = torch.cuda.max_memory_allocated() / (1024 ** 3) 

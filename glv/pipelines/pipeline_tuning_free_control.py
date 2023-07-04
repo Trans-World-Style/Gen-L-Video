@@ -344,8 +344,6 @@ class TuningFreeControlPipeline(DiffusionPipeline):
         views = get_views(video_length,window_size=window_size,stride=stride)
         count = torch.zeros_like(latents)
         value = torch.zeros_like(latents)
-        print(latents.shape)
-        print(control.shape)
         for i in tqdm(range(timestep)):
             count.zero_()
             value.zero_()
@@ -354,7 +352,13 @@ class TuningFreeControlPipeline(DiffusionPipeline):
                 latent_view = latents[:,:,t_start:t_end]
                 t = self.scheduler.timesteps[len(self.scheduler.timesteps) - i - 1]
                 latent_input = latent_view
-                noise_pred = get_noise_pred_single(latent_input, t, cond_embeddings, self.unet, None,control_tmp)
+                #######################
+                print(f'latent_input: {latent_input.device}')
+                print(f'cond_embeddings: {cond_embeddings.device}')
+                print(f'self.unet: {self.unet.device}')
+                print(f'control_tmp: {control_tmp.device}')
+                #######################
+                noise_pred = get_noise_pred_single(latent_input, t, cond_embeddings, self.unet, None, control_tmp)
                 latent_view_denoised = next_step(noise_pred, t, latent_view, self.scheduler)
                 value[:,:,t_start:t_end] += latent_view_denoised
                 count[:,:,t_start:t_end] += 1
