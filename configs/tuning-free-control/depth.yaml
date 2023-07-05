@@ -7,7 +7,7 @@ train_data:
   video_path: "./ControlNet/t_data/winter.mp4"
   control_path: "./ControlNet/c_data/canny/winter.mp4"
   prompt: ""
-  n_sample_frames: 20
+  n_sample_frames: 10
   width: 512
   height: 512
   sample_start_idx: 0
@@ -20,13 +20,13 @@ validation_data:
   - '4k cute animation style'
 #   - 'disney animation style, humorous, cartoon'
 #   - 'simpson animation style, humorous, cartoon'
-  video_length: 20
+  video_length: 10
   width: 512
   height: 512
-  num_inference_steps: 50
+  num_inference_steps: 25
   guidance_scale: 12.5
   use_inv_latent: True
-  num_inv_steps: 50
+  num_inv_steps: 25
   stride: 5
   use_l2: False
   strength: 0.2
