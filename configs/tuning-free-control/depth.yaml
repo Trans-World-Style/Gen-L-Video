@@ -1,7 +1,7 @@
 # The Minimum VRAM Requirement is around 10-15 GB. Longer video will not cost more.
 pretrained_model_path: "weights/chilloutmix"
 
-output_dir: "./results/tuning-free-control/canny5/"
+output_dir: "./results/tuning-free-control/canny6/"
 
 train_data:
   video_path: "./ControlNet/t_data/jerry.mp4"
@@ -22,10 +22,10 @@ validation_data:
   video_length: 16
   width: 512
   height: 512
-  num_inference_steps: 50
+  num_inference_steps: 25
   guidance_scale: 12.5
   use_inv_latent: True
-  num_inv_steps: 50
+  num_inv_steps: 25
   stride: 5
   use_l2: False
   strength: 0.2
