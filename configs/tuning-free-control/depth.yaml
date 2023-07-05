@@ -7,7 +7,7 @@ train_data:
   video_path: "./ControlNet/t_data/jerry.mp4"
   control_path: "./ControlNet/c_data/canny/jerry.mp4"
   prompt: ""
-  n_sample_frames: 16
+  n_sample_frames: 160
   width: 512
   height: 512
   sample_start_idx: 0
@@ -19,7 +19,7 @@ validation_data:
    - 'lego animation style, humorous, cartoon'
 #   - 'disney animation style, humorous, cartoon'
 #   - 'simpson animation style, humorous, cartoon'
-  video_length: 16
+  video_length: 160
   width: 512
   height: 512
   num_inference_steps: 25
