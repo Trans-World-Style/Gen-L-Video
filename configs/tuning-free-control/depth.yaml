@@ -16,7 +16,7 @@ controlnet_path: "weights/sd-controlnet-depth"
 controlnet_scale: 0.6
 validation_data:
   prompts:
-   - 'lego animation style, cartoon, 8k, character'
+   - 'lego animation style, cartoon, 4k, clear face, clear finger'
 #   - 'disney animation style, humorous, cartoon'
 #   - 'simpson animation style, humorous, cartoon'
   video_length: 20
