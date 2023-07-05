@@ -219,7 +219,7 @@ class VideoProcessor:
         self.control_task = control_task
         self.trim_value = trim_value
         # self.controls = ["canny","hough", "hed","scribble","fake_scribble","pose","seg","depth","normal"]
-        self.controls = ["canny"]
+        self.controls = ["depth"]
         self.tmp_path = f"tmp-{trim_value}-{split}"
 
         if not os.path.exists(self.t_path):
