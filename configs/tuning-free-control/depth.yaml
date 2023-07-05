@@ -7,7 +7,7 @@ train_data:
   video_path: "./ControlNet/t_data/jerry.mp4"
   control_path: "./ControlNet/c_data/canny/jerry.mp4"
   prompt: ""
-  n_sample_frames: 28
+  n_sample_frames: 24
   width: 512
   height: 512
   sample_start_idx: 0
