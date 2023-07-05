@@ -1,11 +1,11 @@
 # The Minimum VRAM Requirement is around 10-15 GB. Longer video will not cost more.
 pretrained_model_path: "weights/chilloutmix"
 
-output_dir: "./results/tuning-free-control/canny6/"
+output_dir: "./results/tuning-free-control/canny7/"
 
 train_data:
-  video_path: "./ControlNet/t_data/jerry.mp4"
-  control_path: "./ControlNet/c_data/canny/jerry.mp4"
+  video_path: "./ControlNet/t_data/winter.mp4"
+  control_path: "./ControlNet/c_data/canny/winter.mp4"
   prompt: ""
   n_sample_frames: 20
   width: 512
@@ -16,7 +16,8 @@ controlnet_path: "weights/sd-controlnet-depth"
 controlnet_scale: 0.6
 validation_data:
   prompts:
-   - 'lego animation style, cartoon, 4k, clear face, clear finger'
+#   - 'lego animation style, cartoon, 4k, clear face, clear finger'
+  - 'beautiful animation style, cartoon, 4k'
 #   - 'disney animation style, humorous, cartoon'
 #   - 'simpson animation style, humorous, cartoon'
   video_length: 20
