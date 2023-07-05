@@ -23,10 +23,10 @@ validation_data:
   video_length: 10
   width: 512
   height: 512
-  num_inference_steps: 25
+  num_inference_steps: 50
   guidance_scale: 12.5
   use_inv_latent: True
-  num_inv_steps: 25
+  num_inv_steps: 50
   stride: 5
   use_l2: False
   strength: 0.2
