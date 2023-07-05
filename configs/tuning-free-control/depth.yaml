@@ -19,7 +19,7 @@ validation_data:
    - 'lego animation style, humorous, cartoon'
 #   - 'disney animation style, humorous, cartoon'
 #   - 'simpson animation style, humorous, cartoon'
-  video_length: 28
+  video_length: 24
   width: 512
   height: 512
   num_inference_steps: 25
