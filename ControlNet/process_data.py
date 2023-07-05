@@ -320,7 +320,7 @@ parser.add_argument("--t_path",default="./t_data")
 parser.add_argument("--c_path",default="./c_data")
 parser.add_argument("--control_task",default="multi")
 parser.add_argument("--trim_value",default=100,type=int)
-parser.add_argument("--fps",default=30,type=int)
+parser.add_argument("--fps",default=20,type=int)
 parser.add_argument("--split",default=0)
 
 if __name__ == "__main__":
