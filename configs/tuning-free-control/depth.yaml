@@ -4,8 +4,8 @@ pretrained_model_path: "weights/chilloutmix"
 output_dir: "./results/tuning-free-control/canny5/"
 
 train_data:
-  video_path: "../ControlNet/t_data/jerry.mp4"
-  control_path: "../ControlNet/c_data/canny/jerry.mp4"
+  video_path: "./ControlNet/t_data/jerry.mp4"
+  control_path: "./ControlNet/c_data/canny/jerry.mp4"
   prompt: ""
   n_sample_frames: 16
   width: 512
