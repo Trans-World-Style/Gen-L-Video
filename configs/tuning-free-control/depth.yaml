@@ -7,7 +7,7 @@ train_data:
   video_path: "./ControlNet/t_data/winter.mp4"
   control_path: "./ControlNet/c_data/canny/winter.mp4"
   prompt: ""
-  n_sample_frames: 20
+  n_sample_frames: 16
   width: 512
   height: 512
   sample_start_idx: 0
@@ -17,10 +17,10 @@ controlnet_scale: 0.6
 validation_data:
   prompts:
 #   - 'lego animation style, cartoon, 4k, clear face, clear finger'
-  - 'beautiful animation style, cartoon, 4k'
+  - 'cute animation style, cartoon, 4k'
 #   - 'disney animation style, humorous, cartoon'
 #   - 'simpson animation style, humorous, cartoon'
-  video_length: 20
+  video_length: 16
   width: 512
   height: 512
   num_inference_steps: 50
