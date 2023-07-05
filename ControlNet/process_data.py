@@ -234,6 +234,7 @@ class VideoProcessor:
         for video_name in os.listdir(self.v_path):
             if video_name in os.listdir(self.t_path):
                 print(f"already process {video_name},skip")
+                self._process(video_name)
                 continue
             try:
                 self._process(video_name)
