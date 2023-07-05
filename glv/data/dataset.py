@@ -49,7 +49,8 @@ class GLVDataset(Dataset):
         self.vr = decord.VideoReader(self.video_path, width=self.width, height=self.height)
         self.sample_index = list(range(self.sample_start_idx, len(self.vr), self.sample_frame_rate))        
         self.full_video = rearrange(self.vr.get_batch(self.sample_index),"f h w c -> f c h w")
-        self.len_video = len(self.sample_index) 
+        self.len_video = len(self.sample_index)
+        print(f'video lenth: {self.len_video}')
         self.len_video = self.len_video-self.len_video%self.n_sample_frames
         self.sample_index = self.sample_index[:self.len_video]
         self.len_dataset = (self.len_video - self.n_sample_frames)//self.stride + 1
