@@ -29,6 +29,24 @@ check_min_version("0.10.0.dev0")
 
 logger = get_logger(__name__, log_level="INFO")
 
+def check_gpu(message=None):
+    import GPUtil
+
+    print('--------------------')
+    if message is not None:
+        print(message)
+
+    # GPU 정보를 가져옴
+    gpus = GPUtil.getGPUs()
+
+    # 각 GPU의 정보 출력
+    for gpu in gpus:
+        print(f"GPU {gpu.id}: {gpu.name}")
+        print(f"  Free Memory: {gpu.memoryFree}MB")
+        print(f"  Used Memory: {gpu.memoryUsed}MB")
+        print(f"  Total Memory: {gpu.memoryTotal}MB")
+        print("")
+
 def main(
     pretrained_model_path: str,
     output_dir: str,
@@ -152,6 +170,7 @@ def main(
             pixel_values = rearrange(pixel_values, "b f c h w -> (b f) c h w")
             latents = [ ]
             for i in range(0,video_length,validation_data.video_length):
+                check_gpu()
                 latents.append( vae.encode(pixel_values[i:i+validation_data.video_length].to(vae.device)).latent_dist.sample())
             latents = torch.cat(latents,dim=0)
             latents = rearrange(latents, "(b f) c h w -> b c f h w", f=video_length)
