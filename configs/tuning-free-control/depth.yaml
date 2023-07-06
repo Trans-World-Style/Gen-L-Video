@@ -18,7 +18,7 @@ validation_data:
   prompts:
 #   - 'lego animation style, cartoon, 4k, clear face, clear finger'
 #  - '4k cute lego style'
-  - ''
+  - 'animation character'
 #   - 'disney animation style, humorous, cartoon'
 #   - 'simpson animation style, humorous, cartoon'
   video_length: 10
