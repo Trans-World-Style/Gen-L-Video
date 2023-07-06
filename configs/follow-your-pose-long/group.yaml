@@ -4,7 +4,8 @@ output_dir: "./results/follow-your-pose-t2v/group/"
 
 train_data:
   n_sample_frames: 16
-  video_path: "./c_data/mmpose/group.mp4"
+#  video_path: "./c_data/mmpose/group.mp4"
+  video_path: ".ControlNet/c_data/pose/winter.mp4"
   width: 512
   height: 512
   sample_start_idx: 0
@@ -19,13 +20,14 @@ validation_data:
   num_inv_steps: 50
   stride: 4
   prompts:
-  - "Stormtroopers on the sea"
-  - "Stormtroopers on the beach"
-  - "Astronauts on the moon"
-  - "Robots in Antarctica"
-  - "Monkeys in the forest"
-  - "Astronauts on the beach"
-  - "Xenomorphs in the desert"
+#  - "Stormtroopers on the sea"
+#  - "Stormtroopers on the beach"
+#  - "Astronauts on the moon"
+#  - "Robots in Antarctica"
+#  - "Monkeys in the forest"
+#  - "Astronauts on the beach"
+#  - "Xenomorphs in the desert"
+  - "animation style dance"
   mix_prompts:
 
 seed: 33
