@@ -88,7 +88,10 @@ def main(
     text_encoder.requires_grad_(False)
 
     unet.requires_grad_(False)
-    adapter_weight = torch.load(adapter_paths["mmpose"])
+    # adapter_weight = torch.load(adapter_paths["mmpose"])
+    #################
+    adapter_weight = torch.load(adapter_paths["pose"])
+    ##################
     unet.skeleton_adapter.load_state_dict(adapter_weight)
         
     if enable_xformers_memory_efficient_attention:

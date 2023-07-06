@@ -171,6 +171,10 @@ class FYPLongPipeline(DiffusionPipeline):
         else:
             attention_mask = None
 
+        print(f'device: {device}')
+        print(f'text_input_ids: {text_input_ids}')
+        print(f'text_encoder: {self.text_encoder}')
+
         text_embeddings = self.text_encoder(
             text_input_ids.to(device),
             attention_mask=attention_mask,
