@@ -27,7 +27,7 @@ validation_data:
 #  - "Monkeys in the forest"
 #  - "Astronauts on the beach"
 #  - "Xenomorphs in the desert"
-  - "animation style dance"
+  - "ironman in the moon"
   mix_prompts:
 
 seed: 33
