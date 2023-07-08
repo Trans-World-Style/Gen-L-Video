@@ -177,18 +177,15 @@ def main(
             samples = []
             if validation_data.mix_prompts is not None:
                 for idx, prompt in enumerate(validation_data.mix_prompts):
-                    with torch.autocast("cuda"):
-                        validation_multidata = copy.deepcopy(validation_data)
-                        validation_multidata.video_length = ddim_inv_latent.shape[2]
-                        prompt = list(prompt)
-                        # print(f'validation_pipeline: {validation_pipeline.device}')
-                        # print(f'pixel_values: {pixel_values.device}')
-                        # print(f'ddim_inv_latent: {ddim_inv_latent.device}')
-                        sample = validation_pipeline.gen_long(prompt, control=pixel_values, generator=generator,
-                                                              latents=ddim_inv_latent,
-                                                              window_size=validation_data.video_length,
-                                                              device=validation_pipeline.device,
-                                                              **validation_multidata).videos
+                    # with torch.autocast("cuda"):
+                    validation_multidata = copy.deepcopy(validation_data)
+                    validation_multidata.video_length = ddim_inv_latent.shape[2]
+                    prompt = list(prompt)
+                    sample = validation_pipeline.gen_long(prompt, control=pixel_values, generator=generator,
+                                                          latents=ddim_inv_latent,
+                                                          window_size=validation_data.video_length,
+                                                          device=validation_pipeline.device,
+                                                          **validation_multidata).videos
                     save_videos_grid(sample, f"{output_dir}/samples/sample-mix/{prompt[0]}.gif")
                     samples.append(sample)
                 samples = torch.concat(samples)
