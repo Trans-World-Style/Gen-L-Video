@@ -15,9 +15,9 @@ validation_data:
   video_length: 16
   width: 512
   height: 512
-  num_inference_steps: 50
+  num_inference_steps: 10
   guidance_scale: 12.5
-  num_inv_steps: 50
+  num_inv_steps: 10
   stride: 4
   prompts:
 #  - "Stormtroopers on the sea"
