@@ -83,7 +83,6 @@ def main(
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
 
-    import os
     print(f'cuda env: {os.environ["PYTORCH_CUDA_ALLOC_CONF"]}')
     # Freeze vae and text_encoder
     vae.requires_grad_(False)
