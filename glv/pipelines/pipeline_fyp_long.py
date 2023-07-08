@@ -171,10 +171,6 @@ class FYPLongPipeline(DiffusionPipeline):
         else:
             attention_mask = None
 
-        print(f'device: {device}')
-        print(f'text_input_ids: {text_input_ids.device}')
-        print(f'text_encoder: {self.text_encoder.device}')
-
         text_embeddings = self.text_encoder(
             text_input_ids.to(device),
             attention_mask=attention_mask,
@@ -453,7 +449,7 @@ class FYPLongPipeline(DiffusionPipeline):
 
         # Encode input prompt
         text_embeddings = self._encode_prompt(
-            prompt, device, num_videos_per_prompt, do_classifier_free_guidance, negative_prompt
+            prompt, self.text_encoder.device, num_videos_per_prompt, do_classifier_free_guidance, negative_prompt
         )
 
         # Prepare timesteps
@@ -480,7 +476,6 @@ class FYPLongPipeline(DiffusionPipeline):
         value = torch.zeros_like(latents)
         # Prepare extra step kwargs.
         extra_step_kwargs = self.prepare_extra_step_kwargs(generator, eta)
-        print(views)
 
         # Denoising loop
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order

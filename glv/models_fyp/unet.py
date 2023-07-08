@@ -311,6 +311,7 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         # The overall upsampling factor is equal to 2 ** (# num of upsampling layears).
         # However, the upsampling interpolation output size can be forced to fit any upsampling size
         # on the fly if necessary.
+        input_device = sample.device
         sample = sample.to(self.device)
         encoder_hidden_states = encoder_hidden_states.to(self.device)
         default_overall_up_factor = 2**self.num_upsamplers
@@ -431,7 +432,7 @@ class UNet3DConditionModel(ModelMixin, ConfigMixin):
         if not return_dict:
             return (sample,)
 
-        return UNet3DConditionOutput(sample=sample)
+        return UNet3DConditionOutput(sample=sample.to(input_device))
 
     @classmethod
     def from_pretrained_2d(cls, pretrained_model_path, subfolder=None):
