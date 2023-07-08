@@ -27,6 +27,7 @@ from glv.pipelines.pipeline_fyp_long import FYPLongPipeline
 from glv.util import ddim_inversion_long, save_videos_grid
 from einops import rearrange
 
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:256"
 
 # Will error if the minimal version of diffusers is not installed. Remove at your own risks.
 check_min_version("0.10.0.dev0")
@@ -83,7 +84,6 @@ def main(
     vae = AutoencoderKL.from_pretrained(pretrained_model_path, subfolder="vae", device_map=device_map)
     unet = UNet3DConditionModel.from_pretrained_2d(pretrained_model_path, subfolder="unet")
 
-    print(f'cuda env: {os.environ["PYTORCH_CUDA_ALLOC_CONF"]}')
     # Freeze vae and text_encoder
     vae.requires_grad_(False)
     text_encoder.requires_grad_(False)
