@@ -471,13 +471,14 @@ class FYPLongPipeline(DiffusionPipeline):
         )
         latents_dtype = latents.dtype
 
-        print(f'latents: {latents.device}')
-
         views = get_views(video_length,window_size=window_size,stride=stride)
         count = torch.zeros_like(latents)
         value = torch.zeros_like(latents)
         # Prepare extra step kwargs.
         extra_step_kwargs = self.prepare_extra_step_kwargs(generator, eta)
+
+        print(f'latents: {latents.device}')
+        print(f'device: {self.device}')
 
         # Denoising loop
         num_warmup_steps = len(timesteps) - num_inference_steps * self.scheduler.order
