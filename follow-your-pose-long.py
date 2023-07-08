@@ -208,6 +208,8 @@ adapter_paths={
     "mmpose": "weights/T2I-Adapter/models/pose_encoder.pth"
 }
 if __name__ == "__main__":
+    import time
+    st = time.time()
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="./configs/follow-your-pose-long/group.yaml")
     args = parser.parse_args()
@@ -217,3 +219,4 @@ if __name__ == "__main__":
     main(**conf)
     max_memory_allocated = torch.cuda.max_memory_allocated() / (1024 ** 3) 
     print(f"max memory allocated: {max_memory_allocated:.3f} GB.")
+    print(f'running time: {time.time() - st}')

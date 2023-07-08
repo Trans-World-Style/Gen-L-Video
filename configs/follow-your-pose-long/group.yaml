@@ -1,5 +1,5 @@
 pretrained_model_path: "weights/follow-your-pose"
-output_dir: "./results/follow-your-pose-t2v/group1/"
+output_dir: "./results/follow-your-pose-t2v/group2/"
 
 
 train_data:
