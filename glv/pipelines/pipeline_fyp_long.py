@@ -494,7 +494,7 @@ class FYPLongPipeline(DiffusionPipeline):
                     latent_model_input = self.scheduler.scale_model_input(latent_model_input, t)
 
                     # predict the noise residual
-                    noise_pred = self.unet(latent_model_input, t, encoder_hidden_states=text_embeddings, control=control_tmp, train_or_sample='sample').sample.to(dtype=latents_dtype)
+                    noise_pred = self.unet(latent_model_input, t, encoder_hidden_states=text_embeddings, control=control_tmp, train_or_sample='sample').sample#.to(dtype=latents_dtype)
                     # noise_pred = self.unet(latent_model_input, t, t_start,encoder_hidden_states=text_embeddings).sample.to(dtype=latents_dtype)
 
                     if do_classifier_free_guidance:
