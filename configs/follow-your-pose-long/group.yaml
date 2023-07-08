@@ -3,7 +3,7 @@ output_dir: "./results/follow-your-pose-t2v/group2/"
 
 
 train_data:
-  n_sample_frames: 8
+  n_sample_frames: 10
 #  video_path: "./c_data/mmpose/group.mp4"
   video_path: "./ControlNet/c_data/pose/winter.mp4"
   width: 512
@@ -12,12 +12,12 @@ train_data:
   sample_frame_rate: 3
   prompt: ""
 validation_data:
-  video_length: 8
+  video_length: 30
   width: 512
   height: 512
-  num_inference_steps: 10
+  num_inference_steps: 20
   guidance_scale: 12.5
-  num_inv_steps: 10
+  num_inv_steps: 20
   stride: 4
   prompts:
 #  - "Stormtroopers on the sea"

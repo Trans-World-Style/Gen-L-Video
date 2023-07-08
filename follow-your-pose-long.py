@@ -150,7 +150,6 @@ def main(
             pixel_values = batch["full_video"].to(accelerator.device,weight_dtype)[0].unsqueeze(0)
             video_length = pixel_values.shape[1]
             video_length = video_length - video_length % validation_data.video_length
-            print(video_length)
             pixel_values = pixel_values[:,:video_length]
             pixel_values = rearrange(pixel_values, "b f c h w -> b c f h w")
             pixel_values = (pixel_values+1)/2
@@ -162,12 +161,12 @@ def main(
 
             ddim_inv_latent = torch.randn(1,4,video_length,64,64).to(accelerator.device, dtype=weight_dtype)
             for idx, prompt in enumerate(validation_data.prompts):
-                with torch.autocast("cuda"):
-                    validation_multidata = copy.deepcopy(validation_data)
-                    validation_multidata.video_length = ddim_inv_latent.shape[2]
-                    sample = validation_pipeline.gen_long(prompt,control=pixel_values, generator=generator, latents=ddim_inv_latent,
-                                                          window_size=validation_data.video_length, device=validation_pipeline.device,
-                                                          **validation_multidata).videos
+                # with torch.autocast("cuda"):
+                validation_multidata = copy.deepcopy(validation_data)
+                validation_multidata.video_length = ddim_inv_latent.shape[2]
+                sample = validation_pipeline.gen_long(prompt,control=pixel_values, generator=generator, latents=ddim_inv_latent,
+                                                      window_size=validation_data.video_length, device=validation_pipeline.device,
+                                                      **validation_multidata).videos
                 save_videos_grid(sample, f"{output_dir}/samples/sample/{prompt}.gif")
                 samples.append(sample)
             samples = torch.concat(samples)
