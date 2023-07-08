@@ -471,6 +471,8 @@ class FYPLongPipeline(DiffusionPipeline):
         )
         latents_dtype = latents.dtype
 
+        print(f'latents: {latents.device}')
+
         views = get_views(video_length,window_size=window_size,stride=stride)
         count = torch.zeros_like(latents)
         value = torch.zeros_like(latents)
