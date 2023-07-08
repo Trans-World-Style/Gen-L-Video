@@ -1,9 +1,9 @@
 pretrained_model_path: "weights/follow-your-pose"
-output_dir: "./results/follow-your-pose-t2v/group2/"
+output_dir: "./results/follow-your-pose-t2v/group3/"
 
 
 train_data:
-  n_sample_frames: 10
+  n_sample_frames: 5
 #  video_path: "./c_data/mmpose/group.mp4"
   video_path: "./ControlNet/c_data/pose/winter.mp4"
   width: 512
@@ -15,9 +15,9 @@ validation_data:
   video_length: 30
   width: 512
   height: 512
-  num_inference_steps: 20
+  num_inference_steps: 10
   guidance_scale: 12.5
-  num_inv_steps: 20
+  num_inv_steps: 10
   stride: 4
   prompts:
 #  - "Stormtroopers on the sea"

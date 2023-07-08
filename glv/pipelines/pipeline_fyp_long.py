@@ -427,8 +427,8 @@ class FYPLongPipeline(DiffusionPipeline):
         callback_steps: Optional[int] = 1,
         window_size: Optional[int] = 16,
         stride: Optional[int] = 8,
-        control = None,
-        device = None,
+        control=None,
+        device=None,
         **kwargs,
     ):
         # Default height and width to unet
